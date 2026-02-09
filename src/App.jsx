@@ -1,10 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginView from "./static/components/Login";
+import SideBar from "./static/components/SideBar";
 
 function App() {
+  const handleLoginSuccess = () => {
+    console.log("User logged in successfully");
+  };
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<h1>Hello World</h1>} />
+        <Route path="/" element={<LoginView onLoginSuccess={handleLoginSuccess} />} />
+        <Route path="/home" element={<SideBar />} />
       </Routes>
     </Router>
   );
