@@ -13,7 +13,7 @@ function LoginView({ onLoginSuccess }) {
         const autoLogin = async () => {
             try {
                 const res = await fetch(
-                    "http://192.168.100.251:8000/auth/refresh-token",
+                    "http://localhost:8000/auth/refresh-token",
                     { method: "POST", credentials: "include" }
                 );
 
@@ -26,7 +26,7 @@ function LoginView({ onLoginSuccess }) {
                 sessionStorage.setItem("accessToken", data.accessToken);
 
                 const userRes = await fetch(
-                    "http://192.168.100.251:8000/api/admin/data",
+                    "http://localhost:8000/api/admin/data",
                     {
                         headers: { Authorization: `Bearer ${data.accessToken}` },
                         credentials: "include",
@@ -42,7 +42,6 @@ function LoginView({ onLoginSuccess }) {
                 const userInfo = await userRes.json();
                 sessionStorage.setItem("userDetails", JSON.stringify(userInfo));
 
-                onLoginSuccess();
                 navigate("/home");
             } catch (err) {
                 console.error(err);
@@ -52,13 +51,13 @@ function LoginView({ onLoginSuccess }) {
         };
 
         autoLogin();
-    }, [onLoginSuccess, navigate]);
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await fetch(
-                "http://192.168.100.251:8000/auth/login/admin",
+                "http://localhost:8000/auth/login/admin",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -76,7 +75,7 @@ function LoginView({ onLoginSuccess }) {
             sessionStorage.setItem("accessToken", data.token);
 
             const userRes = await fetch(
-                "http://192.168.100.251:8000/api/admin/data",
+                "http://localhost:8000/api/admin/data",
                 {
                     headers: { Authorization: `Bearer ${data.token}` },
                     credentials: "include",
@@ -91,7 +90,6 @@ function LoginView({ onLoginSuccess }) {
             const userInfo = await userRes.json();
             sessionStorage.setItem("userDetails", JSON.stringify(userInfo));
 
-            onLoginSuccess();
             navigate("/home");
         } catch (err) {
             console.error(err);
