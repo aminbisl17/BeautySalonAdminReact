@@ -84,6 +84,18 @@
     margin-bottom: 10px;
 }
 
+.center-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.employees-container {
+  flex: 1;              /* take full vertical space */
+  width: 100%;          /* take full horizontal space */
+  overflow: auto;       /* scroll if table is tall */
+}
+
 /* Optional: scrollable table if too wide */
 .main-content {
     overflow-x: auto;
@@ -128,6 +140,20 @@
     white-space: nowrap;
     pointer-events: none;
     transition: opacity 0.2s ease;
+}
+
+.layout {
+  display: flex;
+  height: 100vh; /* full viewport height */
+  width: 100%;
+}
+
+.center-content {
+  flex: 1;               /* take all remaining space */
+  padding: 1rem;
+  overflow: auto;        /* scroll if content is too big */
+  display: flex;         /* optional if you want table to stretch */
+  flex-direction: column;
 }
 
 /* Desktop hover */

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import '../css/login.css';
 
-function LoginView({ onLoginSuccess }) {
+function LoginView() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(true); // track auto-login attempt

@@ -165,10 +165,12 @@ const store = {
 };
 
  function EmployeesTable({ Employees, onRegister }) {
+
   const [employees, setEmployees] = useState(store.employees);
 
   return (
-    <div>
+
+    <div className="employees-container">
       <button onClick={onRegister}>Register</button>
       <table className="employees-table">
         <thead>
