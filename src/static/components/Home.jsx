@@ -1,5 +1,8 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchEmployees } from "../javascript/API/Employees/EmployeesAPI";
+import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 import '../css/home.css';
+
 
 function SideBar({ setActivePage }) {
   return (
@@ -35,17 +38,32 @@ function SideBar({ setActivePage }) {
 
 function Home() {
   const [activePage, setActivePage] = useState("dashboard");
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
+  const handleSelectEmployee = (emp) => {
+    setSelectedEmployee(emp);
+    setActivePage("employeeProfile"); // switch page to profile
+  };
 
   const renderContent = () => {
     switch (activePage) {
-      case "profile":
-        return <h2>Profili Page</h2>;
       case "dashboard":
         return <h2>Dashboard Page</h2>;
+
       case "employees":
-        return <EmployeesTable />;
+        return (
+          <EmployeesTable
+            onSelect={handleSelectEmployee} // when row clicked
+            onRegister={() => console.log("Register new employee")}
+          />
+        );
+
+      case "employeeProfile":
+        return <Employees emp={selectedEmployee} />; // show profile only
+
       case "services":
         return <h2>Sherbimet Page</h2>;
+
       default:
         return <h2>Dashboard Page</h2>;
     }
@@ -54,9 +72,7 @@ function Home() {
   return (
     <div className="layout">
       <SideBar setActivePage={setActivePage} />
-      <div className="center-content">
-        {renderContent()}
-      </div>
+      <div className="center-content">{renderContent()}</div>
     </div>
   );
 }
@@ -137,36 +153,24 @@ function Employees({ emp }) {
   );
 }
 
-const store = {
-  employees: [
-    {
-      ID: 1,
-      emri: "Amin",
-      mbiemri: "Bislimaj",
-      username: "aminb",
-      email: "amin@email.com",
-      numri_telefonit: "044123456",
-      gjinia: "Mashkull",
-      is_active: true,
-      data_regjistrimit: new Date()
-    },
-    {
-      ID: 2,
-      emri: "Ana",
-      mbiemri: "Hoxha",
-      username: "anah",
-      email: "ana@email.com",
-      numri_telefonit: "044987654",
-      gjinia: "Femër",
-      is_active: false,
-      data_regjistrimit: new Date()
+
+ function EmployeesTable({ onSelect, onRegister }) {
+
+
+    const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    loadEmployees();
+  }, []);
+
+  async function loadEmployees() {
+    try {
+      const data = await fetchEmployees();
+      setEmployees(data);
+    } catch (err) {
+      ExceptionHandler.handle(err);
     }
-  ]
-};
-
- function EmployeesTable({ Employees, onRegister }) {
-
-  const [employees, setEmployees] = useState(store.employees);
+  }
 
   return (
 
@@ -187,7 +191,7 @@ const store = {
         </thead>
         <tbody>
           {employees.map(emp => (
-            <tr key={emp.ID} onClick={() => <Employees emp={Employees}/>}>
+            <tr key={emp.ID} onClick={() => onSelect && onSelect(emp)}>
               <td>{emp.ID}</td>
               <td>{emp.emri} {emp.mbiemri}</td>
               <td>{emp.username}</td>

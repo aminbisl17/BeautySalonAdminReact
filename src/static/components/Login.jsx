@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import '../css/login.css';
+import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 
 function LoginView() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(true); // track auto-login attempt
-    const [error, setError] = useState("");       // track backend errors
+    const [loading, setLoading] = useState(true); // track auto-login attempt // track backend errors
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -34,18 +34,17 @@ function LoginView() {
                 );
 
                 if (!userRes.ok) {
-                    setError("Failed to fetch user data");
+                   alert("Failed to fetch user data.");
                     setLoading(false);
                     return;
                 }
 
                 const userInfo = await userRes.json();
                 sessionStorage.setItem("userDetails", JSON.stringify(userInfo));
-
                 navigate("/home");
             } catch (err) {
                 console.error(err);
-                setError("Backend server is not reachable.");
+                 ExceptionHandler.handle(err);
                 setLoading(false); // show form
             }
         };
@@ -93,7 +92,7 @@ function LoginView() {
             navigate("/home");
         } catch (err) {
             console.error(err);
-            alert("Backend server is not reachable.");
+            ExceptionHandler.handle(err);
         }
     };
 
@@ -102,7 +101,6 @@ function LoginView() {
     return (
         <div className="login-container">
             <h1>Login</h1>
-            {error && <p style={{color: 'red'}}>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
