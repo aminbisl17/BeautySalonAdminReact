@@ -1,83 +1,128 @@
 import React, { useState, useEffect } from "react";
-import { fetchEmployees } from "../javascript/API/Employees/EmployeesAPI";
+import { fetchEmployees, updateEmployee } from "../javascript/API/Employees/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 
+
+
 export function Employees({ emp }) {
+  const [firstName, setFirstName] = useState(emp?.emri || "");
+  const [lastName, setLastName] = useState(emp?.mbiemri || "");
+  const [username, setUsername] = useState(emp?.username || "");
+  const [email, setEmail] = useState(emp?.email || "");
+  const [phone, setPhone] = useState(emp?.numri_telefonit || "");
+  const [gender, setGender] = useState(emp?.gjinia || "Mashkull");
+  const [status, setStatus] = useState(emp?.is_active ? "true" : "false");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (emp) {
+      setFirstName(emp.emri);
+      setLastName(emp.mbiemri);
+      setEmail(emp.email);
+      setUsername(emp.username);
+      setPhone(emp.numri_telefonit);
+      setGender(emp.gjinia);
+      setStatus(emp.is_active ? "true" : "false");
+    }
+  }, [emp]);
 
   if (!emp) return <div>No employee selected</div>;
 
+  const save = async () => {
+    setLoading(true);
+
+    const updatedEmp = {
+      emri: firstName,
+      mbiemri: lastName,
+      username: username,
+      email,
+      numri_telefonit: phone,
+      gjinia: gender,
+      is_active: status === "true",
+    };
+
+    try {
+      await updateEmployee(emp.ID, updatedEmp); // call your API
+      alert("Employee updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update employee.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <div className="profile-card">
+    <div className="profile-card">
+      <div className="profile-header">
+        <div className="profile-avatar">👤</div>
 
-        <div className="profile-header">
-          <div className="profile-avatar">👤</div>
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="First Name"
+        />
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          placeholder="Last Name"
+        />
 
-          <input
-            type="text"
-            value={`${emp.emri} ${emp.mbiemri}`}
-            readOnly
-          />
-
-          <input
-            type="text"
-            value={emp.username}
-            readOnly
-          />
-        </div>
-
-        <div className="profile-info">
-
-          <label>
-            ID:
-            <input type="text" value={emp.ID} readOnly />
-          </label>
-
-          <label>
-            Email:
-            <input type="email" value={emp.email} />
-          </label>
-
-          <label>
-            Phone:
-            <input type="text" value={emp.numri_telefonit} />
-          </label>
-
-          <label>
-            Gender:
-            <select value={emp.gjinia}>
-              <option value="Mashkull">Male</option>
-              <option value="Femër">Female</option>
-            </select>
-          </label>
-
-          <label>
-            Status:
-            <select value={emp.is_active ? "true" : "false"}>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
-          </label>
-
-          <label>
-            Registered:
-            <input
-              type="text"
-              value={new Date(emp.data_regjistrimit).toLocaleString()}
-              readOnly
-            />
-          </label>
-
-        </div>
-
-        <button>Save</button>
-        <button className="delete-btn">Delete</button>
-
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
       </div>
+
+      <div className="profile-info">
+        <label>
+          ID:
+          <input type="text" value={emp.ID} readOnly />
+        </label>
+
+
+        <label>
+          Email:
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+
+        <label>
+          Phone:
+          <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+        </label>
+
+        <label>
+          Gender:
+          <select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="Mashkull">Male</option>
+            <option value="Femër">Female</option>
+          </select>
+        </label>
+
+        <label>
+          Status:
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </label>
+
+        <label>
+          Registered:
+          <input
+            type="text"
+            value={new Date(emp.data_regjistrimit).toLocaleString()}
+            readOnly
+          />
+        </label>
+      </div>
+
+      <button onClick={save} disabled={loading}>
+        {loading ? "Saving..." : "Save"}
+      </button>
+      <button className="delete-btn">Delete</button>
     </div>
   );
 }
-
 
 export function EmployeesTable({ onSelect, onRegister }) {
 

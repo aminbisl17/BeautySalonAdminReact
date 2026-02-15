@@ -35,7 +35,7 @@ export async function registerEmployee(employeeData) {
 
 export async function updateEmployee(id, employeeData) {
   try{
-  const res = await fetch(`http://192.168.100.251:8000/api/admin/employees/update/${id}`, {
+  const res = await fetch(`http://192.168.100.47:8000/api/admin/employees/update/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(employeeData)
