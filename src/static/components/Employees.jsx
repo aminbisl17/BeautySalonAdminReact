@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchEmployees, updateEmployee } from "../javascript/API/Employees/EmployeesAPI";
+import { fetchEmployees, updateEmployee, registerEmployee } from "../javascript/API/Employees/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 
 
@@ -174,6 +174,79 @@ export function EmployeesTable({ onSelect, onRegister }) {
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+
+export function RegisterEmployee() {
+
+    const [loading, setLoading] = useState(false);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    setLoading(true);
+
+    const data = {
+      emri: e.target.emri.value,
+      mbiemri: e.target.mbiemri.value,
+      pershkrimi: e.target.pershkrimi.value,
+      gjinia: e.target.gjinia.value,
+      numri_telefonit: e.target.numri_telefonit.value,
+      email: e.target.email.value,
+      username: e.target.username.value,
+      password: e.target.userpassword.value,
+    };
+
+
+    try {
+      await registerEmployee(data); // call your API
+      alert("Employee registered successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update employee.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
+    <div className="register-container">
+      <h2>Register</h2>
+      <form id="registerForm" onSubmit={handleSubmit}>
+        <label>Emri</label>
+        <input type="text" id="emri" placeholder="Emri" required />
+
+        <label>Mbiemri</label>
+        <input type="text" id="mbiemri" placeholder="Mbiemri" required />
+
+        <label>Pershkrimi</label>
+        <textarea id="pershkrimi" placeholder="Shkruaj nje pershkrim..." />
+
+        <label>Gjinia</label>
+        <select id="gjinia" required>
+          <option value="Mashkull">Mashkull</option>
+          <option value="Femer">Femer</option>
+        </select>
+
+        <label>Numri i telefonit</label>
+        <input type="text" id="numri_telefonit" placeholder="Numri i telefonit" required />
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Email" required />
+
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Username" required />
+
+        <label>Password</label>
+        <input type="password" id="userpassword" placeholder="Fjalkalimi" required />
+
+        <button type="submit" disabled={loading} onClick={handleSubmit}>Register</button>
+         {loading ? "Registering..." : "Register"}
+      </form>
     </div>
   );
 }

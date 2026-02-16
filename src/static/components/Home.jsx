@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EmployeesTable, Employees } from "./Employees";
+import { EmployeesTable, Employees, RegisterEmployee } from "./Employees";
 import '../css/home.css';
 import { Profile } from "./Porfile";
 
@@ -57,12 +57,15 @@ function Home() {
         return (
           <EmployeesTable
             onSelect={handleSelectEmployee} // when row clicked
-            onRegister={() => console.log("Register new employee")}
+            onRegister={() => setActivePage("employeeRegister")}
           />
         );
 
       case "employeeProfile":
-        return <Employees emp={selectedEmployee} />; // show profile only
+        return <Employees emp={selectedEmployee} />; 
+
+        case "employeeRegister":
+          return <RegisterEmployee/>
 
       case "services":
         return <h2>Sherbimet Page</h2>;
