@@ -30,9 +30,14 @@ export async function registerEmployee(employeeData) {
   });
 
   if (res.status === 401) throw new TokenException();
+
+      
+    return (await res.json()).message;
+
 }
   catch(err){
  ExceptionHandler.handle(err);
+ return [];
 }
 }
 

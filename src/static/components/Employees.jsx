@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { fetchEmployees, updateEmployee, registerEmployee } from "../javascript/API/Employees/EmployeesAPI";
+import {
+  fetchEmployees,
+  updateEmployee,
+  registerEmployee,
+} from "../javascript/API/Employees/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
-
-
 
 export function Employees({ emp }) {
   const [firstName, setFirstName] = useState(emp?.emri || "");
@@ -70,7 +72,11 @@ export function Employees({ emp }) {
           placeholder="Last Name"
         />
 
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
       </div>
 
       <div className="profile-info">
@@ -79,15 +85,22 @@ export function Employees({ emp }) {
           <input type="text" value={emp.ID} readOnly />
         </label>
 
-
         <label>
           Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </label>
 
         <label>
           Phone:
-          <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
         </label>
 
         <label>
@@ -125,9 +138,7 @@ export function Employees({ emp }) {
 }
 
 export function EmployeesTable({ onSelect, onRegister }) {
-
-
-    const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
     loadEmployees();
@@ -143,7 +154,6 @@ export function EmployeesTable({ onSelect, onRegister }) {
   }
 
   return (
-
     <div className="employees-container">
       <button onClick={onRegister}>Register</button>
       <table className="employees-table">
@@ -160,16 +170,22 @@ export function EmployeesTable({ onSelect, onRegister }) {
           </tr>
         </thead>
         <tbody>
-          {employees.map(emp => (
+          {employees.map((emp) => (
             <tr key={emp.ID} onClick={() => onSelect && onSelect(emp)}>
               <td>{emp.ID}</td>
-              <td>{emp.emri} {emp.mbiemri}</td>
+              <td>
+                {emp.emri} {emp.mbiemri}
+              </td>
               <td>{emp.username}</td>
               <td>{emp.email}</td>
               <td>{emp.numri_telefonit}</td>
               <td>{emp.gjinia}</td>
               <td>{emp.is_active ? "Active" : "Inactive"}</td>
-              <td>{emp.data_regjistrimit ? new Date(emp.data_regjistrimit).toLocaleString() : "N/A"}</td>
+              <td>
+                {emp.data_regjistrimit
+                  ? new Date(emp.data_regjistrimit).toLocaleString()
+                  : "N/A"}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -178,74 +194,73 @@ export function EmployeesTable({ onSelect, onRegister }) {
   );
 }
 
-
 export function RegisterEmployee() {
-
-    const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     setLoading(true);
 
-    const data = {
-      emri: e.target.emri.value,
-      mbiemri: e.target.mbiemri.value,
-      pershkrimi: e.target.pershkrimi.value,
-      gjinia: e.target.gjinia.value,
-      numri_telefonit: e.target.numri_telefonit.value,
-      email: e.target.email.value,
-      username: e.target.username.value,
-      password: e.target.userpassword.value,
-    };
-
-
     try {
-      await registerEmployee(data); // call your API
-      alert("Employee registered successfully!");
+      const formData = new FormData(e.target);
+
+      const data = {
+        emri: formData.get("emri"),
+        mbiemri: formData.get("mbiemri"),
+        pershkrimi: formData.get("pershkrimi"),
+        gjinia: formData.get("gjinia"),
+        numri_telefonit: formData.get("numri_telefonit"),
+        email: formData.get("email"),
+        username: formData.get("username"),
+        userpassword: formData.get("userpassword"),
+      };
+
+      const message = await registerEmployee(data);
+      alert(message);
+      e.target.reset();
     } catch (err) {
       console.error(err);
-      alert("Failed to update employee.");
+      alert("Failed to register employee.");
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
     <div className="register-container">
       <h2>Register</h2>
-      <form id="registerForm" onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit}>
         <label>Emri</label>
-        <input type="text" id="emri" placeholder="Emri" required />
+        <input type="text" name="emri" required />
 
         <label>Mbiemri</label>
-        <input type="text" id="mbiemri" placeholder="Mbiemri" required />
+        <input type="text" name="mbiemri" required />
 
         <label>Pershkrimi</label>
-        <textarea id="pershkrimi" placeholder="Shkruaj nje pershkrim..." />
+        <textarea name="pershkrimi" />
 
         <label>Gjinia</label>
-        <select id="gjinia" required>
+        <select name="gjinia" required>
           <option value="Mashkull">Mashkull</option>
           <option value="Femer">Femer</option>
         </select>
 
         <label>Numri i telefonit</label>
-        <input type="text" id="numri_telefonit" placeholder="Numri i telefonit" required />
+        <input type="text" name="numri_telefonit" required />
 
         <label>Email</label>
-        <input type="email" id="email" placeholder="Email" required />
+        <input type="email" name="email" required />
 
         <label>Username</label>
-        <input type="text" id="username" placeholder="Username" required />
+        <input type="text" name="username" required />
 
         <label>Password</label>
-        <input type="password" id="userpassword" placeholder="Fjalkalimi" required />
+        <input type="password" name="userpassword" required />
 
-        <button type="submit" disabled={loading} onClick={handleSubmit}>Register</button>
-         {loading ? "Registering..." : "Register"}
+        <button type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </button>
       </form>
     </div>
   );
