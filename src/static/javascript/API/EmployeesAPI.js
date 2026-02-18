@@ -1,5 +1,5 @@
-import { ExceptionHandler } from "../../Exceptions/ExceptionHandler";
-import { TokenException } from "../../Exceptions/TokenException";
+import { ExceptionHandler } from "../Exceptions/ExceptionHandler";
+import { TokenException } from "../Exceptions/TokenException";
 
 export async function fetchEmployees() {
   try {

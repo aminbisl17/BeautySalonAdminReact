@@ -3,7 +3,7 @@ import {
   fetchEmployees,
   updateEmployee,
   registerEmployee,
-} from "../javascript/API/Employees/EmployeesAPI";
+} from "../javascript/API/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 
 export function Employees({ emp }) {
@@ -138,6 +138,8 @@ export function Employees({ emp }) {
 }
 
 export function EmployeesTable({ onSelect, onRegister }) {
+
+  
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {

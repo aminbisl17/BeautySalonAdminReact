@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { EmployeesTable, Employees, RegisterEmployee } from "./Employees";
+import { ServiceTable } from "./Services";
 import '../css/home.css';
 import { Profile } from "./Porfile";
 
@@ -36,49 +37,38 @@ function SideBar({ setActivePage }) {
   );
 }
 
+
 function Home() {
   const [activePage, setActivePage] = useState("profile");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const handleSelectEmployee = (emp) => {
     setSelectedEmployee(emp);
-    setActivePage("employeeProfile"); // switch page to profile
+    setActivePage("employeeProfile"); // switch page to employee profile
   };
 
-  const renderContent = () => {
-    switch (activePage) {
-
-      case "profile":
-       return <Profile/>
-      case "dashboard":
-        return <h2>Dashboard Page</h2>;
-
-      case "employees":
-        return (
-          <EmployeesTable
-            onSelect={handleSelectEmployee} // when row clicked
-            onRegister={() => setActivePage("employeeRegister")}
-          />
-        );
-
-      case "employeeProfile":
-        return <Employees emp={selectedEmployee} />; 
-
-        case "employeeRegister":
-          return <RegisterEmployee/>
-
-      case "services":
-        return <h2>Sherbimet Page</h2>;
-
-      default:
-        return <h2>Dashboard Page</h2>;
-    }
+  const pages = {
+    profile: <Profile />,
+    dashboard: <h2>Dashboard Page</h2>,
+    employees: (
+      <EmployeesTable
+        onSelect={handleSelectEmployee} // when row clicked
+        onRegister={() => setActivePage("employeeRegister")}
+      />
+    ),
+    employeeProfile: selectedEmployee ? (
+      <Employees emp={selectedEmployee} />
+    ) : (
+      <h2>No employee selected</h2>
+    ),
+    employeeRegister: <RegisterEmployee />,
+    services: <ServiceTable />,
   };
 
   return (
     <div className="layout">
       <SideBar setActivePage={setActivePage} />
-      <div className="center-content">{renderContent()}</div>
+      <div className="center-content">{pages[activePage] || <h2>Dashboard Page</h2>}</div>
     </div>
   );
 }
