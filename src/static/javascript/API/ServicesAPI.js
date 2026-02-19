@@ -20,7 +20,7 @@ export async function fetchServices(){
 }
 
 export async function fetchServiceAtributes(ID) {
-    const token = sessionStorage.getItem("accessToken");
+  const token = sessionStorage.getItem("accessToken");
 
   try {
     const response = await fetch(
@@ -32,14 +32,20 @@ export async function fetchServiceAtributes(ID) {
       }
     );
 
-  if(response === 401) throw new TokenException();
+    if (response.status === 401) throw new TokenException();
 
- return await response.json();
+    if (!response.ok) {
+      throw new Error(`Failed to fetch service attributes. Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Fetched service attributes:", data); // 🔍 debug
+    return data;
+
+  } catch (err) {
+    ExceptionHandler.handle(err);
+    return null; // return null instead of []
   }
- catch(err){
-  ExceptionHandler.handle(err);
-  return [];
- }
 }
 
 export async function registerServices(data){

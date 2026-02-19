@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EmployeesTable, Employees, RegisterEmployee } from "./Employees";
-import { ServiceTable } from "./Services";
+import { ServiceTable, ViewService } from "./Services";
 import '../css/home.css';
 import { Profile } from "./Porfile";
 
@@ -41,11 +41,17 @@ function SideBar({ setActivePage }) {
 function Home() {
   const [activePage, setActivePage] = useState("profile");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const[selectedService, setSelectedService] = useState(null);
 
   const handleSelectEmployee = (emp) => {
     setSelectedEmployee(emp);
     setActivePage("employeeProfile"); // switch page to employee profile
   };
+
+const handleSelectedService = (serviceObj) => {
+  setSelectedService(serviceObj); 
+  setActivePage("service");
+};
 
   const pages = {
     profile: <Profile />,
@@ -62,7 +68,8 @@ function Home() {
       <h2>No employee selected</h2>
     ),
     employeeRegister: <RegisterEmployee />,
-    services: <ServiceTable />,
+    services: <ServiceTable onSelect={handleSelectedService}/>,
+    service: <ViewService serviceId={selectedService}/>
   };
 
   return (
