@@ -39,12 +39,12 @@ export async function fetchServiceAtributes(ID) {
     }
 
     const data = await response.json();
-    console.log("Fetched service attributes:", data); // 🔍 debug
+    
     return data;
 
   } catch (err) {
     ExceptionHandler.handle(err);
-    return null; // return null instead of []
+    return null; 
   }
 }
 

@@ -48,11 +48,10 @@ function Home() {
     setActivePage("employeeProfile"); // switch page to employee profile
   };
 
-const handleSelectedService = (serviceObj) => {
-  setSelectedService(serviceObj); 
+const handleSelectedService = (service) => {
+  setSelectedService(service); 
   setActivePage("service");
 };
-
   const pages = {
     profile: <Profile />,
     dashboard: <h2>Dashboard Page</h2>,
@@ -69,7 +68,7 @@ const handleSelectedService = (serviceObj) => {
     ),
     employeeRegister: <RegisterEmployee />,
     services: <ServiceTable onSelect={handleSelectedService}/>,
-    service: <ViewService serviceId={selectedService}/>
+    service: <ViewService service={selectedService}/>
   };
 
   return (
