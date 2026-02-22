@@ -98,7 +98,16 @@ export function ViewService({ service }) {
     );
   };
 
-  // Save everything
+  const handleDelete = async () =>{
+
+
+    try{
+
+
+    }catch(err){
+      ExceptionHandler.handle(err);
+    }
+  }
   const handleSave = async () => {
     try {
       const updatedService = {

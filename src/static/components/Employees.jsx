@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   fetchEmployees,
   updateEmployee,
   registerEmployee,
+  deleteEmployee
 } from "../javascript/API/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
-
 export function Employees({ emp }) {
+
+    const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState(emp?.emri || "");
   const [lastName, setLastName] = useState(emp?.mbiemri || "");
   const [username, setUsername] = useState(emp?.username || "");
@@ -30,6 +34,21 @@ export function Employees({ emp }) {
 
   if (!emp) return <div>No employee selected</div>;
 
+const deleteEmp = async () => {
+
+  const confirmDelete = window.confirm("Are you sure you want to delete this employee?");
+  
+  if (!confirmDelete) return; 
+
+  try {
+    await deleteEmployee(emp.ID);
+    alert("Employee Deleted!");
+    navigate("/", { replace: true }); 
+  } catch (err) {
+    ExceptionHandler.handle(err);
+  }
+};
+
   const save = async () => {
     setLoading(true);
 
@@ -47,8 +66,9 @@ export function Employees({ emp }) {
       await updateEmployee(emp.ID, updatedEmp); // call your API
       alert("Employee updated successfully!");
     } catch (err) {
-      console.error(err);
-      alert("Failed to update employee.");
+ //     console.error(err);
+    //  alert("Failed to update employee.");
+    ExceptionHandler.handle(err);
     } finally {
       setLoading(false);
     }
@@ -132,7 +152,7 @@ export function Employees({ emp }) {
       <button onClick={save} disabled={loading}>
         {loading ? "Saving..." : "Save"}
       </button>
-      <button className="delete-btn">Delete</button>
+      <button className="delete-btn" onClick={deleteEmp}>Delete</button>
     </div>
   );
 }
