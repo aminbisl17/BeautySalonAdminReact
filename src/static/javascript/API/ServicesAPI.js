@@ -26,6 +26,7 @@ export async function fetchServiceAtributes(ID) {
     const response = await fetch(
       `http://192.168.100.47:8000/api/mixed/sherbimet/atributet/${ID}`,
       {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -87,5 +88,28 @@ export async function updateService(id,data){
   }catch(err){
     ExceptionHandler.handle(err);
     return false;
+  }
+}
+
+export async function deleteService(id) {
+  const token = sessionStorage.getItem("accessToken");
+
+  try {
+    const response = await fetch(`http://192.168.100.47:8000/api/admin/sherbimet/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 401) throw new TokenException();
+
+    const data = await response.text(); 
+    return data;
+
+  } catch (err) {
+    ExceptionHandler.handle(err);
+    return []
   }
 }

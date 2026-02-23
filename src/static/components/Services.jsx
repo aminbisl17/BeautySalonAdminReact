@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchServiceAtributes, fetchServices, updateService } from "../javascript/API/ServicesAPI";
+import { deleteService, fetchServiceAtributes, fetchServices, updateService } from "../javascript/API/ServicesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 import "../css/services.css";
+import { useNavigate } from "react-router-dom";
 
 export function ServiceTable({onSelect}) {
   const [services, setServices] = useState([]);
@@ -62,6 +63,8 @@ export function ServiceTable({onSelect}) {
 
 
 export function ViewService({ service }) {
+
+      const navigate = useNavigate();
   const [form, setForm] = useState({ ...service });
   const [attributes, setAttributes] = useState([]);
 
@@ -99,11 +102,13 @@ export function ViewService({ service }) {
   };
 
   const handleDelete = async () =>{
-
-
     try{
 
+      const res = await deleteService(service.ID);
 
+      alert(res);
+
+       navigate("/", { replace: true }); 
     }catch(err){
       ExceptionHandler.handle(err);
     }
@@ -117,7 +122,7 @@ export function ViewService({ service }) {
         zbritja: parseFloat(form.zbritja),
         is_active: form.is_active === "true" || form.is_active === true,
         kohezgjatja: form.kohezgjatja,
-        // ⚠️ IMPORTANT: backend expects 'atributet'
+ 
         atributet: attributes.map((attr) => ({
           id_atributit: attr.id_atributit ?? null, // null for new attrs
           opsioni: attr.opsioni,
@@ -128,14 +133,14 @@ export function ViewService({ service }) {
         })),
       };
 
-      console.log("Sending to API:", updatedService);
-
       const success = await updateService(form.ID, updatedService);
       if (success) alert("Service updated successfully!");
     } catch (err) {
       ExceptionHandler.handle(err);
     }
   };
+
+
 
   if (!service) return <div>Loading service...</div>;
 
@@ -244,7 +249,7 @@ export function ViewService({ service }) {
       )}
 
       <button onClick={handleSave}>Save</button>
-      <button className="delete-btn">Delete</button>
+      <button onClick={handleDelete} className="delete-btn">Delete</button>
     </div>
   );
 }
