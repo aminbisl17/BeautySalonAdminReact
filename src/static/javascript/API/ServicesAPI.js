@@ -1,30 +1,43 @@
 import { ExceptionHandler } from "../Exceptions/ExceptionHandler";
 import { TokenException } from "../Exceptions/TokenException";
 
-export async function fetchServices(){
+export async function fetchServices() {
 
-    const token = sessionStorage.getItem("accessToken");
-  try{
-   const response = await fetch("http://192.168.100.47:8000/api/mixed/sherbimet/all",{
-          headers: { Authorization: `Bearer ${token}` }
-   });
-  
-   if(response === 401) throw new TokenException();
+  const token = sessionStorage.getItem("accessToken");
 
-   return await response.json();
+  try {
+    const response = await fetch(
+      "http://192.168.100.116:8000/api/mixed/sherbimet/all",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Handle auth errors FIRST
+    if (response.status === 401 || response.status === 403) {
+      throw new TokenException();
+    }
+
+    // Handle other errors
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+
+    return await response.json();
+
+  } catch (err) {
+    ExceptionHandler.handle(err);
+    return [];
   }
- catch(err){
-  ExceptionHandler.handle(err);
-  return [];
- }
 }
-
 export async function fetchServiceAtributes(ID) {
   const token = sessionStorage.getItem("accessToken");
 
   try {
     const response = await fetch(
-      `http://192.168.100.47:8000/api/mixed/sherbimet/atributet/${ID}`,
+      `http://192.168.100.116:8000/api/mixed/sherbimet/atributet/${ID}`,
       {
         method: "GET",
         headers: {
@@ -54,7 +67,7 @@ export async function registerServices(data){
     const token = sessionStorage.getItem("accessToken");
 
   try{
-    const response = await fetch("http://192.168.100.47:8000/api/admin/sherbimet/register",{
+    const response = await fetch("http://192.168.100.116:8000/api/admin/sherbimet/register",{
           method: "POST",
             headers: { "Content-Type": "application/json" ,
             "Authorization": `Bearer ${token}`},
@@ -75,7 +88,7 @@ export async function updateService(id,data){
 
   try{
 
-    const response = await fetch(`http://192.168.100.47:8000/api/admin/sherbimet/update/${id}`,
+    const response = await fetch(`http://192.168.100.116:8000/api/admin/sherbimet/update/${id}`,
       {
         method: "PUT",
         headers:{"Content-Type": "application/json" ,
@@ -95,7 +108,7 @@ export async function deleteService(id) {
   const token = sessionStorage.getItem("accessToken");
 
   try {
-    const response = await fetch(`http://192.168.100.47:8000/api/admin/sherbimet/delete/${id}`, {
+    const response = await fetch(`http://192.168.100.116:8000/api/admin/sherbimet/delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

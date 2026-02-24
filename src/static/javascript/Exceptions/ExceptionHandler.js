@@ -1,8 +1,10 @@
+
+
 export class ExceptionHandler{
 
 
    static redirect(){
-        window.location.href='/';
+         window.location.replace("/");
     }
 
     static handle(ex){

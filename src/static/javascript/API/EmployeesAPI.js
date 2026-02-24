@@ -6,7 +6,7 @@ export async function fetchEmployees() {
     const token = sessionStorage.getItem("accessToken"); // <- read here, not at top
     if (!token) throw new Error("No access token found");
 
-    const res = await fetch("http://192.168.100.47:8000/api/admin/employees/all", {
+    const res = await fetch("http://192.168.100.116:8000/api/admin/employees/all", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -23,7 +23,7 @@ export async function registerEmployee(employeeData) {
 
   const token = sessionStorage.getItem("accessToken");
   try{
-  const res = await fetch("http://192.168.100.47:8000/api/admin/employees/register", {
+  const res = await fetch("http://192.168.100.116:8000/api/admin/employees/register", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(employeeData)
@@ -44,7 +44,7 @@ export async function registerEmployee(employeeData) {
 export async function updateEmployee(id, employeeData) {
   const token = sessionStorage.getItem("accessToken");
   try{
-  const res = await fetch(`http://192.168.100.47:8000/api/admin/employees/update/${id}`, {
+  const res = await fetch(`http://192.168.100.116:8000/api/admin/employees/update/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(employeeData)
@@ -62,7 +62,7 @@ export async function deleteEmployee(id){
   const token = sessionStorage.getItem("accessToken");
       
   try{
-            const res = await fetch(`http://192.168.100.47:8000/api/admin/employees/delete/${id}`, {
+            const res = await fetch(`http://192.168.100.116:8000/api/admin/employees/delete/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
