@@ -7,7 +7,7 @@ export async function fetchServices() {
 
   try {
     const response = await fetch(
-      "http://192.168.100.116:8000/api/mixed/sherbimet/all",
+      "http://localhost:8000/api/mixed/sherbimet/all",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ export async function fetchServiceAtributes(ID) {
 
   try {
     const response = await fetch(
-      `http://192.168.100.116:8000/api/mixed/sherbimet/atributet/${ID}`,
+      `http://localhost:8000/api/mixed/sherbimet/atributet/${ID}`,
       {
         method: "GET",
         headers: {
@@ -53,6 +53,12 @@ export async function fetchServiceAtributes(ID) {
     }
 
     const data = await response.json();
+
+       if (data.ImagePath) {
+      data.imageURL = `data:image/jpeg;base64,${data.ImagePath}`;
+    } else {
+      data.imageURL = null; // explicitly null for missing images
+    }
     
     return data;
 
@@ -67,7 +73,7 @@ export async function registerServices(data){
     const token = sessionStorage.getItem("accessToken");
 
   try{
-    const response = await fetch("http://192.168.100.116:8000/api/admin/sherbimet/register",{
+    const response = await fetch("http://localhost:8000/api/admin/sherbimet/register",{
           method: "POST",
             headers: { "Content-Type": "application/json" ,
             "Authorization": `Bearer ${token}`},
@@ -88,7 +94,7 @@ export async function updateService(id,data){
 
   try{
 
-    const response = await fetch(`http://192.168.100.116:8000/api/admin/sherbimet/update/${id}`,
+    const response = await fetch(`http://localhost:8000/api/admin/sherbimet/update/${id}`,
       {
         method: "PUT",
         headers:{"Content-Type": "application/json" ,
@@ -108,7 +114,7 @@ export async function deleteService(id) {
   const token = sessionStorage.getItem("accessToken");
 
   try {
-    const response = await fetch(`http://192.168.100.116:8000/api/admin/sherbimet/delete/${id}`, {
+    const response = await fetch(`http://localhost:8000/api/admin/sherbimet/delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

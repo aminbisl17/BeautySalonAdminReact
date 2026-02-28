@@ -68,22 +68,28 @@ export function ViewService({ service }) {
   const [form, setForm] = useState({ ...service });
   const [attributes, setAttributes] = useState([]);
 
-  // Load attributes when service changes
   useEffect(() => {
-    if (!service?.ID) return;
+  if (!service?.ID) return;
 
-    async function loadAttributes() {
-      try {
-        const data = await fetchServiceAtributes(service.ID);
-        setAttributes(data);
-      } catch (err) {
-        ExceptionHandler.handle(err);
-      }
+  async function loadAttributes() {
+    try {
+      const data = await fetchServiceAtributes(service.ID);
+
+      // Set imageURL in form
+      setForm((prev) => ({
+        ...prev,
+        ...data, 
+      }));
+
+      // Set attributes
+      setAttributes(data.atributet || []);
+    } catch (err) {
+      ExceptionHandler.handle(err);
     }
+  }
 
-    loadAttributes();
-    setForm({ ...service });
-  }, [service]);
+  loadAttributes();
+}, [service]);
 
   // Handle service field changes
   const handleChange = (e) => {
@@ -147,7 +153,21 @@ export function ViewService({ service }) {
   return (
     <div className="profile-card">
       <div className="profile-header">
-        <div className="profile-avatar">🛠️</div>
+       
+    
+  <div className="profile-avatar">
+  {form.imageURL ? (
+    <img
+      src={form.imageURL}
+      alt="Service"
+      loading="lazy"
+      style={{ width: "80px", height: "80px", borderRadius: "50%" }}
+    />
+  ) : (
+    <div style={{ fontSize: "40px" }}>🛠️</div> // fallback avatar
+  )}
+</div>
+   
         <input
           type="text"
           name="emri_sherbimit"
