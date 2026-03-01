@@ -57,14 +57,18 @@ export async function fetchServiceAtributes(ID) {
        if (data.ImagePath) {
       data.imageURL = `data:image/jpeg;base64,${data.ImagePath}`;
     } else {
-      data.imageURL = null; // explicitly null for missing images
+      data.imageURL = null; 
     }
     
     return data;
 
   } catch (err) {
     ExceptionHandler.handle(err);
-    return null; 
+   // return null; 
+   return {
+    atributet: [],
+    imageURL: null
+  };
   }
 }
 

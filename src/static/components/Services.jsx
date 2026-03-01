@@ -75,13 +75,11 @@ export function ViewService({ service }) {
     try {
       const data = await fetchServiceAtributes(service.ID);
 
-      // Set imageURL in form
       setForm((prev) => ({
         ...prev,
         ...data, 
       }));
 
-      // Set attributes
       setAttributes(data.atributet || []);
     } catch (err) {
       ExceptionHandler.handle(err);
