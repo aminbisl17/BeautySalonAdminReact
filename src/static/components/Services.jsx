@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { deleteService, fetchServiceAtributes, fetchServices, updateService } from "../javascript/API/ServicesAPI";
+import { deleteService, fetchServiceAtributes, fetchServices, updateService, registerServices } from "../javascript/API/ServicesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 import "../css/services.css";
 import { useNavigate } from "react-router-dom";
 
-export function ServiceTable({onSelect}) {
+export function ServiceTable({onSelect, onRegister}) {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function ServiceTable({onSelect}) {
 
   return (
     <div>
-      <button id="registerBtn">Register</button>
+      <button id="registerBtn" onClick={onRegister}>Register</button>
       <table className="employees-table">
         <thead>
           <tr>
@@ -269,5 +269,190 @@ export function ViewService({ service }) {
       <button onClick={handleSave}>Save</button>
       <button onClick={handleDelete} className="delete-btn">Delete</button>
     </div>
+  );
+}
+
+;
+
+export function RegisterService() {
+  const [service, setService] = useState({
+    emri_sherbimit: "",
+    pershkrimi: "",
+    qmimi_baze: "",
+    zbritja: 0,
+    kohezgjatja: "",
+    atributet: [],
+  });
+
+  const [image, setImage] = useState(null);
+
+  // Handle main form change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setService((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Add atribut
+  const addAtribut = () => {
+    setService((prev) => ({
+      ...prev,
+      atributet: [
+        ...prev.atributet,
+        {
+          opsioni: "",
+          pershkrimi: "",
+          kohezgjatja: "",
+          qmimi: 0,
+          zbritja: 0,
+        },
+      ],
+    }));
+  };
+
+  // Handle atribut change
+  const handleAtributChange = (index, e) => {
+    const { name, value } = e.target;
+
+    const updatedAtributet = [...service.atributet];
+    updatedAtributet[index][name] = value;
+
+    setService((prev) => ({
+      ...prev,
+      atributet: updatedAtributet,
+    }));
+  };
+
+  // Submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formattedData = {
+      ...service,
+      qmimi_baze: parseFloat(service.qmimi_baze),
+      zbritja: parseInt(service.zbritja),
+      atributet: service.atributet.map((a) => ({
+        ...a,
+        qmimi: parseFloat(a.qmimi),
+        zbritja: parseInt(a.zbritja),
+      })),
+    };
+
+    const response = await registerServices(formattedData, image);
+    alert(response ? "Success" : "Failed");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <fieldset>
+        <legend>Service Info</legend>
+
+        <label>Emri Sherbimit</label>
+        <input
+          type="text"
+          name="emri_sherbimit"
+          value={service.emri_sherbimit}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Pershkrimi</label>
+        <textarea
+          name="pershkrimi"
+          value={service.pershkrimi}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Qmimi Baze</label>
+        <input
+          type="number"
+          step="0.01"
+          name="qmimi_baze"
+          value={service.qmimi_baze}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Zbritja</label>
+        <input
+          type="number"
+          name="zbritja"
+          value={service.zbritja}
+          onChange={handleChange}
+        />
+
+        <label>Kohëzgjatja</label>
+        <input
+          type="time"
+          step="1"
+          name="kohezgjatja"
+          value={service.kohezgjatja}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Image</label>
+        <input
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+      </fieldset>
+
+      <fieldset>
+        <legend>Atributet</legend>
+
+        {service.atributet.map((atribut, index) => (
+          <div key={index} className="atribut">
+            <input
+              type="text"
+              name="opsioni"
+              placeholder="Opsioni"
+              value={atribut.opsioni}
+              onChange={(e) => handleAtributChange(index, e)}
+            />
+
+            <textarea
+              name="pershkrimi"
+              placeholder="Pershkrimi"
+              value={atribut.pershkrimi}
+              onChange={(e) => handleAtributChange(index, e)}
+            />
+
+            <input
+              type="time"
+              step="1"
+              name="kohezgjatja"
+              value={atribut.kohezgjatja}
+              onChange={(e) => handleAtributChange(index, e)}
+            />
+
+            <input
+              type="number"
+              name="qmimi"
+              placeholder="Qmimi"
+              value={atribut.qmimi}
+              onChange={(e) => handleAtributChange(index, e)}
+            />
+
+            <input
+              type="number"
+              name="zbritja"
+              placeholder="Zbritja"
+              value={atribut.zbritja}
+              onChange={(e) => handleAtributChange(index, e)}
+            />
+          </div>
+        ))}
+
+        <button type="button" onClick={addAtribut}>
+          + Add Atribut
+        </button>
+      </fieldset>
+
+      <button type="submit">Register Service</button>
+    </form>
   );
 }

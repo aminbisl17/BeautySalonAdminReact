@@ -54,10 +54,12 @@ export async function fetchServiceAtributes(ID) {
 
     const data = await response.json();
 
-       if (data.ImagePath) {
-      data.imageURL = `data:image/jpeg;base64,${data.ImagePath}`;
+       if (data.imagePath) {
+    
+      data.imageURL = `data:image/jpeg;base64,${data.imagePath}`;
     } else {
       data.imageURL = null; 
+   
     }
     
     return data;
@@ -72,21 +74,33 @@ export async function fetchServiceAtributes(ID) {
   }
 }
 
-export async function registerServices(data){
+export async function registerServices(data, imageFile) {
+  const token = sessionStorage.getItem("accessToken");
 
-    const token = sessionStorage.getItem("accessToken");
+  const formData = new FormData();
 
-  try{
-    const response = await fetch("http://localhost:8000/api/admin/sherbimet/register",{
-          method: "POST",
-            headers: { "Content-Type": "application/json" ,
-            "Authorization": `Bearer ${token}`},
-            body: JSON.stringify(data) });
+  formData.append("data", JSON.stringify(data));
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
 
-            if(response === 401) throw new TokenException();
+  try {
+    const response = await fetch(
+      "http://localhost:8000/api/admin/sherbimet/register",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, 
 
-            return true;
-  } catch(err){
+        },
+        body: formData,
+      }
+    );
+
+    if (response.status === 401) throw new TokenException();
+
+    return true;
+  } catch (err) {
     ExceptionHandler.handle(err);
     return false;
   }

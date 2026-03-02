@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EmployeesTable, Employees, RegisterEmployee } from "./Employees";
-import { ServiceTable, ViewService } from "./Services";
+import { ServiceTable, ViewService, RegisterService } from "./Services";
 import '../css/home.css';
 import { Profile } from "./Porfile";
 
@@ -57,7 +57,7 @@ const handleSelectedService = (service) => {
     dashboard: <h2>Dashboard Page</h2>,
     employees: (
       <EmployeesTable
-        onSelect={handleSelectEmployee} // when row clicked
+        onSelect={handleSelectEmployee} 
         onRegister={() => setActivePage("employeeRegister")}
       />
     ),
@@ -67,8 +67,9 @@ const handleSelectedService = (service) => {
       <h2>No employee selected</h2>
     ),
     employeeRegister: <RegisterEmployee />,
-    services: <ServiceTable onSelect={handleSelectedService}/>,
-    service: <ViewService service={selectedService}/>
+    services: <ServiceTable onSelect={handleSelectedService} onRegister={()=> setActivePage("registerService")} />,
+    service: <ViewService service={selectedService}/>,
+    registerService: <RegisterService />
   };
 
   return (
