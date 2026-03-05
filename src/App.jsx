@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginView from "./static/components/Login";
-import Home from "./static/components/Home";
+import LoginView from "./components/Login";
+import Home from "./components/Home";
 
 function App() {
   return (
