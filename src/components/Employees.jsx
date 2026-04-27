@@ -74,87 +74,116 @@ const deleteEmp = async () => {
     }
   };
 
-  return (
-    <div className="profile-card">
-      <div className="profile-header">
-        <div className="profile-avatar">👤</div>
+return (
+  <div className="container-fluid py-3">
 
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First Name"
-        />
-        <input
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          placeholder="Last Name"
-        />
+    {/* HEADER */}
+    <div className="d-flex justify-content-between align-items-center mb-3">
+      <h4>Employee Profile</h4>
 
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-
-      <div className="profile-info">
-        <label>
-          ID:
-          <input type="text" value={emp.ID} readOnly />
-        </label>
-
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-
-        <label>
-          Phone:
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </label>
-
-        <label>
-          Gender:
-          <select value={gender} onChange={(e) => setGender(e.target.value)}>
-            <option value="Mashkull">Male</option>
-            <option value="Femër">Female</option>
-          </select>
-        </label>
-
-        <label>
-          Status:
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-          </select>
-        </label>
-
-        <label>
-          Registered:
-          <input
-            type="text"
-            value={new Date(emp.data_regjistrimit).toLocaleString()}
-            readOnly
-          />
-        </label>
-      </div>
-
-      <button onClick={save} disabled={loading}>
-        {loading ? "Saving..." : "Save"}
+      <button className="btn btn-danger btn-sm" onClick={deleteEmp}>
+        Delete
       </button>
-      <button className="delete-btn" onClick={deleteEmp}>Delete</button>
     </div>
-  );
+
+    <div className="bg-white border rounded shadow-sm p-4">
+
+      <div className="row g-3">
+
+        {/* LEFT INFO */}
+        <div className="col-md-4 text-center border-end">
+
+          <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+            style={{ width: "80px", height: "80px", fontSize: "30px" }}>
+            👤
+          </div>
+
+          <input className="form-control mb-2"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+
+          <input className="form-control mb-2"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+
+          <input className="form-control"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+        </div>
+
+        {/* RIGHT INFO */}
+        <div className="col-md-8">
+
+          <div className="row g-3">
+
+            <div className="col-md-6">
+              <label className="form-label">Email</label>
+              <input className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Phone</label>
+              <input className="form-control"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Gender</label>
+              <select className="form-select"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="Mashkull">Male</option>
+                <option value="Femër">Female</option>
+              </select>
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Status</label>
+              <select className="form-select"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+
+            <div className="col-12">
+              <label className="form-label">Employee ID</label>
+              <input className="form-control" value={emp.ID} readOnly />
+            </div>
+
+            <div className="col-12 d-flex justify-content-end gap-2 mt-3">
+
+              <button
+                className="btn btn-outline-primary"
+                onClick={save}
+                disabled={loading}
+              >
+                {loading ? "Saving..." : "Save Changes"}
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+);
 }
 
 export function EmployeesTable({ onSelect, onRegister }) {
@@ -175,45 +204,76 @@ export function EmployeesTable({ onSelect, onRegister }) {
     }
   }
 
-  return (
-    <div className="employees-container">
-      <button onClick={onRegister}>Register</button>
-      <table className="employees-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Gender</th>
-            <th>Status</th>
-            <th>Date Registered</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((emp) => (
-            <tr key={emp.ID} onClick={() => onSelect && onSelect(emp)}>
-              <td>{emp.ID}</td>
-              <td>
-                {emp.emri} {emp.mbiemri}
-              </td>
-              <td>{emp.username}</td>
-              <td>{emp.email}</td>
-              <td>{emp.numri_telefonit}</td>
-              <td>{emp.gjinia}</td>
-              <td>{emp.is_active ? "Active" : "Inactive"}</td>
-              <td>
-                {emp.data_regjistrimit
-                  ? new Date(emp.data_regjistrimit).toLocaleString()
-                  : "N/A"}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+return (
+  <div className="container-fluid py-3">
+
+    {/* HEADER */}
+    <div className="d-flex justify-content-between align-items-center mb-3">
+      <h4 className="mb-0">Employees</h4>
+
+      <button className="btn btn-primary btn-sm" onClick={onRegister}>
+        + Register Employee
+      </button>
     </div>
-  );
+
+    {/* TABLE CARD */}
+    <div className="bg-white border rounded shadow-sm p-3">
+
+      <div className="table-responsive">
+        <table className="table table-hover align-middle">
+
+          <thead className="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>Status</th>
+              <th>Registered</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {employees.map((emp) => (
+              <tr
+                key={emp.ID}
+                style={{ cursor: "pointer" }}
+                onClick={() => onSelect && onSelect(emp)}
+              >
+                <td>{emp.ID}</td>
+                <td>{emp.emri} {emp.mbiemri}</td>
+                <td>@{emp.username}</td>
+                <td>{emp.email}</td>
+                <td>{emp.numri_telefonit}</td>
+                <td>{emp.gjinia}</td>
+
+                <td>
+                  <span
+                    className={`badge ${
+                      emp.is_active ? "bg-success" : "bg-secondary"
+                    }`}
+                  >
+                    {emp.is_active ? "Active" : "Inactive"}
+                  </span>
+                </td>
+
+                <td>
+                  {emp.data_regjistrimit
+                    ? new Date(emp.data_regjistrimit).toLocaleDateString()
+                    : "N/A"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+);
 }
 
 export function RegisterEmployee() {
@@ -249,41 +309,63 @@ export function RegisterEmployee() {
   };
 
   return (
-    <div className="register-container">
-      <h2>Register</h2>
+  <div className="container-fluid py-3">
 
-      <form onSubmit={handleSubmit}>
-        <label>Emri</label>
-        <input type="text" name="emri" required />
-
-        <label>Mbiemri</label>
-        <input type="text" name="mbiemri" required />
-
-        <label>Pershkrimi</label>
-        <textarea name="pershkrimi" />
-
-        <label>Gjinia</label>
-        <select name="gjinia" required>
-          <option value="Mashkull">Mashkull</option>
-          <option value="Femer">Femer</option>
-        </select>
-
-        <label>Numri i telefonit</label>
-        <input type="text" name="numri_telefonit" required />
-
-        <label>Email</label>
-        <input type="email" name="email" required />
-
-        <label>Username</label>
-        <input type="text" name="username" required />
-
-        <label>Password</label>
-        <input type="password" name="userpassword" required />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
+    <div className="d-flex justify-content-between align-items-center mb-3">
+      <h4>Register Employee</h4>
     </div>
-  );
+
+    <div className="bg-white border rounded shadow-sm p-4">
+
+      <div className="row g-3">
+
+        <div className="col-md-6">
+          <label className="form-label">First Name</label>
+          <input className="form-control" name="emri" required />
+        </div>
+
+        <div className="col-md-6">
+          <label className="form-label">Last Name</label>
+          <input className="form-control" name="mbiemri" required />
+        </div>
+
+        <div className="col-md-6">
+          <label className="form-label">Username</label>
+          <input className="form-control" name="username" required />
+        </div>
+
+        <div className="col-md-6">
+          <label className="form-label">Email</label>
+          <input className="form-control" name="email" type="email" required />
+        </div>
+
+        <div className="col-md-6">
+          <label className="form-label">Phone</label>
+          <input className="form-control" name="numri_telefonit" />
+        </div>
+
+        <div className="col-md-6">
+          <label className="form-label">Gender</label>
+          <select className="form-select" name="gjinia">
+            <option value="Mashkull">Male</option>
+            <option value="Femër">Female</option>
+          </select>
+        </div>
+
+        <div className="col-12">
+          <label className="form-label">Description</label>
+          <textarea className="form-control" name="pershkrimi" rows="3"></textarea>
+        </div>
+
+        <div className="col-12 text-end mt-3">
+          <button className="btn btn-primary" type="submit" disabled={loading}>
+            {loading ? "Registering..." : "Create Employee"}
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+);
 }

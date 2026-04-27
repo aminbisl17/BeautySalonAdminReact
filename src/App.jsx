@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginView from "./components/Login";
 import Home from "./components/Home";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   return (
     <Router>

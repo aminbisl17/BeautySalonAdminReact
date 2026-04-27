@@ -1,0 +1,76 @@
+
+/* Page background (admin feel) */
+body {
+    background: #f4f6f9;
+}
+
+/* Profile header */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 20px;
+}
+
+/* Avatar */
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    background: #0d6efd;
+    color: white;
+    font-size: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Name styling */
+.profile-header h4 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.profile-header small {
+    color: #6c757d;
+}
+
+/* Info panels */
+.profile-box {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 18px;
+    transition: 0.2s ease;
+}
+
+/* subtle hover (admin feel) */
+.profile-box:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+}
+
+/* section titles */
+.profile-box h6 {
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+/* text formatting */
+.profile-box p {
+    margin-bottom: 8px;
+    color: #212529;
+}
+
+/* container spacing */
+.container {
+    max-width: 1000px;
+}

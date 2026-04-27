@@ -33,8 +33,8 @@ function LoginView() {
                     }
                 );
 
-                if (!userRes.ok) {
-                   alert("Failed to fetch user data.");
+                if (!userRes.ok || userRes.status === 403) {
+                   alert("Your session has expired!");
                     setLoading(false);
                     return;
                 }
