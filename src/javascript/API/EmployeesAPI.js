@@ -3,10 +3,11 @@ import { TokenException } from "../Exceptions/TokenException";
 
 export async function fetchEmployees() {
   try {
+    const API = process.env.REACT_APP_EMPLOYEES_ALL;
     const token = sessionStorage.getItem("accessToken"); // <- read here, not at top
     if (!token) throw new Error("No access token found");
 
-    const res = await fetch("http://localhost:8000/api/admin/employees/all", {
+    const res = await fetch(API, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -23,7 +24,8 @@ export async function registerEmployee(employeeData) {
 
   const token = sessionStorage.getItem("accessToken");
   try{
-  const res = await fetch("http://localhost:8000/api/admin/employees/register", {
+       const API = process.env.REACT_APP_EMPLOYEES_REGISTER;
+  const res = await fetch(API, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(employeeData)
@@ -44,7 +46,8 @@ export async function registerEmployee(employeeData) {
 export async function updateEmployee(id, employeeData) {
   const token = sessionStorage.getItem("accessToken");
   try{
-  const res = await fetch(`http://localhost:8000/api/admin/employees/update/${id}`, {
+       const API = process.env.REACT_APP_EMPLOYEES_UPDATE;
+  const res = await fetch(`${API + id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(employeeData)
@@ -62,7 +65,8 @@ export async function deleteEmployee(id){
   const token = sessionStorage.getItem("accessToken");
       
   try{
-            const res = await fetch(`http://localhost:8000/api/admin/employees/delete/${id}`, {
+       const API = process.env.REACT_APP_EMPLOYEES_DELETE;
+            const res = await fetch(`${API+id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

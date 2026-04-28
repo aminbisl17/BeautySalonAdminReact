@@ -1,13 +1,15 @@
 import { ExceptionHandler } from "../Exceptions/ExceptionHandler";
 import { TokenException } from "../Exceptions/TokenException";
 
+
 export async function fetchServices() {
 
+  const API = process.env.REACT_APP_SERVICES_ALL;
   const token = sessionStorage.getItem("accessToken");
 
   try {
     const response = await fetch(
-      "http://localhost:8000/api/mixed/sherbimet/all",
+      API,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -33,11 +35,13 @@ export async function fetchServices() {
   }
 }
 export async function fetchServiceAtributes(ID) {
+
+    const API = process.env.REACT_APP_SERVICES_ATRIBUTES;
   const token = sessionStorage.getItem("accessToken");
 
   try {
     const response = await fetch(
-      `http://localhost:8000/api/mixed/sherbimet/atributet/${ID}`,
+      `${API + ID}`,
       {
         method: "GET",
         headers: {
@@ -76,6 +80,7 @@ export async function fetchServiceAtributes(ID) {
 
 export async function registerServices(data, imageFile) {
   const token = sessionStorage.getItem("accessToken");
+  const API = process.env.REACT_APP_SERVICES_REGISTER;
 
   const formData = new FormData();
 
@@ -107,12 +112,12 @@ export async function registerServices(data, imageFile) {
 }
 
 export async function updateService(id,data){
-
+const API = process.env.REACT_APP_SERVICES_UPDATE;
     const token = sessionStorage.getItem("accessToken");
 
   try{
 
-    const response = await fetch(`http://localhost:8000/api/admin/sherbimet/update/${id}`,
+    const response = await fetch(`${API + id}`,
       {
         method: "PUT",
         headers:{"Content-Type": "application/json" ,
@@ -130,9 +135,9 @@ export async function updateService(id,data){
 
 export async function deleteService(id) {
   const token = sessionStorage.getItem("accessToken");
-
+ const API = process.env.REACT_APP_SERVICES_DELETE;
   try {
-    const response = await fetch(`http://localhost:8000/api/admin/sherbimet/delete/${id}`, {
+    const response = await fetch(`${API + id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

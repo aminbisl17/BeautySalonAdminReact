@@ -9,11 +9,15 @@ function LoginView() {
     const [loading, setLoading] = useState(true); // track auto-login attempt // track backend errors
     const navigate = useNavigate();
 
+       const API_REFRESH_TOKEN = process.env.REACT_APP_REFRESH_TOKEN;
+       const API_LOGIN = process.env.REACT_APP_LOGIN;
+       const API_DATA = process.env.REACT_APP_USER_DATA;
+
     useEffect(() => {
         const autoLogin = async () => {
             try {
                 const res = await fetch(
-                    "http://localhost:8000/auth/refresh-token",
+                    API_REFRESH_TOKEN,
                     { method: "POST", credentials: "include" }
                 );
 
@@ -26,7 +30,7 @@ function LoginView() {
                 sessionStorage.setItem("accessToken", data.accessToken);
 
                 const userRes = await fetch(
-                    "http://localhost:8000/api/admin/data",
+                    API_DATA,
                     {
                         headers: { Authorization: `Bearer ${data.accessToken}` },
                         credentials: "include",
@@ -56,7 +60,7 @@ function LoginView() {
         e.preventDefault();
         try {
             const response = await fetch(
-                "http://localhost:8000/auth/login/admin",
+                 API_LOGIN,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
