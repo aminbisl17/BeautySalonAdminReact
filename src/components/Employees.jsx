@@ -4,12 +4,15 @@ import {
   fetchEmployees,
   updateEmployee,
   registerEmployee,
-  deleteEmployee
+  deleteEmployee,
 } from "../javascript/API/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
+import "../css/tables.css";
+/* =======================================================
+   EMPLOYEE PROFILE
+======================================================= */
 export function Employees({ emp }) {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState(emp?.emri || "");
   const [lastName, setLastName] = useState(emp?.mbiemri || "");
@@ -17,6 +20,7 @@ export function Employees({ emp }) {
   const [email, setEmail] = useState(emp?.email || "");
   const [phone, setPhone] = useState(emp?.numri_telefonit || "");
   const [gender, setGender] = useState(emp?.gjinia || "Mashkull");
+  const [userpassword, setUserpassword] = useState(emp?.userpassword || "");
   const [status, setStatus] = useState(emp?.is_active ? "true" : "false");
   const [loading, setLoading] = useState(false);
 
@@ -24,30 +28,28 @@ export function Employees({ emp }) {
     if (emp) {
       setFirstName(emp.emri);
       setLastName(emp.mbiemri);
-      setEmail(emp.email);
       setUsername(emp.username);
+      setEmail(emp.email);
       setPhone(emp.numri_telefonit);
       setGender(emp.gjinia);
       setStatus(emp.is_active ? "true" : "false");
+      setUserpassword(emp.userpassword);
     }
   }, [emp]);
 
-  if (!emp) return <div>No employee selected</div>;
+  if (!emp) return <div className="container-xl py-4">No employee selected</div>;
 
-const deleteEmp = async () => {
+  const deleteEmp = async () => {
+    if (!window.confirm("Delete this employee?")) return;
 
-  const confirmDelete = window.confirm("Are you sure you want to delete this employee?");
-  
-  if (!confirmDelete) return; 
-
-  try {
-    await deleteEmployee(emp.ID);
-    alert("Employee Deleted!");
-    navigate("/", { replace: true }); 
-  } catch (err) {
-    ExceptionHandler.handle(err);
-  }
-};
+    try {
+      await deleteEmployee(emp.ID);
+      alert("Employee deleted");
+      navigate("/", { replace: true });
+    } catch (err) {
+      ExceptionHandler.handle(err);
+    }
+  };
 
   const save = async () => {
     setLoading(true);
@@ -55,7 +57,8 @@ const deleteEmp = async () => {
     const updatedEmp = {
       emri: firstName,
       mbiemri: lastName,
-      username: username,
+      username,
+      userpassword,
       email,
       numri_telefonit: phone,
       gjinia: gender,
@@ -63,132 +66,144 @@ const deleteEmp = async () => {
     };
 
     try {
-      await updateEmployee(emp.ID, updatedEmp); // call your API
+      await updateEmployee(emp.ID, updatedEmp);
       alert("Employee updated successfully!");
     } catch (err) {
- //     console.error(err);
-    //  alert("Failed to update employee.");
-    ExceptionHandler.handle(err);
+      ExceptionHandler.handle(err);
     } finally {
       setLoading(false);
     }
   };
 
-return (
-  <div className="container-fluid py-3">
-
-    {/* HEADER */}
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <h4>Employee Profile</h4>
-
-      <button className="btn btn-danger btn-sm" onClick={deleteEmp}>
-        Delete
-      </button>
-    </div>
-
-    <div className="bg-white border rounded shadow-sm p-4">
-
-      <div className="row g-3">
-
-        {/* LEFT INFO */}
-        <div className="col-md-4 text-center border-end">
-
-          <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
-            style={{ width: "80px", height: "80px", fontSize: "30px" }}>
-            👤
-          </div>
-
-          <input className="form-control mb-2"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-
-          <input className="form-control mb-2"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-
-          <input className="form-control"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-
+  return (
+     <div className="w-100">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 className="fw-bold mb-1">Employee Profile</h3>
+          <small className="text-muted">Manage employee details</small>
         </div>
 
-        {/* RIGHT INFO */}
-        <div className="col-md-8">
-
-          <div className="row g-3">
-
-            <div className="col-md-6">
-              <label className="form-label">Email</label>
-              <input className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Phone</label>
-              <input className="form-control"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Gender</label>
-              <select className="form-select"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
-                <option value="Mashkull">Male</option>
-                <option value="Femër">Female</option>
-              </select>
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Status</label>
-              <select className="form-select"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-              </select>
-            </div>
-
-            <div className="col-12">
-              <label className="form-label">Employee ID</label>
-              <input className="form-control" value={emp.ID} readOnly />
-            </div>
-
-            <div className="col-12 d-flex justify-content-end gap-2 mt-3">
-
-              <button
-                className="btn btn-outline-primary"
-                onClick={save}
-                disabled={loading}
-              >
-                {loading ? "Saving..." : "Save Changes"}
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
+        <button className="btn btn-danger rounded-pill px-4" onClick={deleteEmp}>
+          Delete
+        </button>
       </div>
 
+      <div className="card border-0 shadow-sm rounded-4">
+        <div className="card-body p-4">
+          <div className="row g-4">
+            {/* LEFT */}
+            <div className="col-md-4 border-end text-center">
+              <div
+                className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                style={{ width: 90, height: 90, fontSize: 34 }}
+              >
+                👤
+              </div>
+
+              <input
+                className="form-control rounded-3 mb-2"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+
+              <input
+                className="form-control rounded-3 mb-2"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+
+              <input
+                className="form-control rounded-3"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+
+            {/* RIGHT */}
+            <div className="col-md-8">
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label">Email</label>
+                  <input
+                    className="form-control rounded-3"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Phone</label>
+                  <input
+                    className="form-control rounded-3"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Password</label>
+                  <input
+                    className="form-control rounded-3"
+                    value={userpassword}
+                    onChange={(e) => setUserpassword(e.target.value)}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Gender</label>
+                  <select
+                    className="form-select rounded-3"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                  >
+                    <option value="Mashkull">Male</option>
+                    <option value="Femër">Female</option>
+                  </select>
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Status</label>
+                  <select
+                    className="form-select rounded-3"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                  </select>
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Employee ID</label>
+                  <input
+                    className="form-control rounded-3"
+                    value={emp.ID}
+                    readOnly
+                  />
+                </div>
+
+                <div className="col-12 text-end mt-3">
+                  <button
+                    className="btn btn-primary rounded-pill px-4"
+                    onClick={save}
+                    disabled={loading}
+                  >
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
+/* =======================================================
+   EMPLOYEES TABLE
+======================================================= */
 export function EmployeesTable({ onSelect, onRegister }) {
-
-  
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
@@ -203,79 +218,67 @@ export function EmployeesTable({ onSelect, onRegister }) {
       ExceptionHandler.handle(err);
     }
   }
-
 return (
-  <div className="container-fluid py-3">
+  <div className="employees-page">
 
-    {/* HEADER */}
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <h4 className="mb-0">Employees</h4>
+    {/* TOP PANEL */}
+    <div className="table-header">
+      <div>
+        <h3 className="fw-bold mb-0">Employees</h3>
+        <small className="text-muted">Manage all staff members</small>
+      </div>
 
-      <button className="btn btn-primary btn-sm" onClick={onRegister}>
+      <button
+        className="btn btn-primary rounded-pill px-4"
+        onClick={onRegister}
+      >
         + Register Employee
       </button>
     </div>
 
-    {/* TABLE CARD */}
-    <div className="bg-white border rounded shadow-sm p-3">
+    {/* TABLE WRAPPER (KEY FIX) */}
+    <div className="table-wrapper">
 
-      <div className="table-responsive">
-        <table className="table table-hover align-middle">
+      <table className="custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+          </tr>
+        </thead>
 
-          <thead className="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Full Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Gender</th>
-              <th>Status</th>
-              <th>Registered</th>
+        <tbody>
+          {employees.map((emp) => (
+            <tr key={emp.ID} onClick={() => onSelect(emp)}>
+              <td>{emp.ID}</td>
+              <td>{emp.emri} {emp.mbiemri}</td>
+              <td>@{emp.username}</td>
+              <td>{emp.email}</td>
+              <td>{emp.numri_telefonit}</td>
+              <td>
+                <span className={`badge ${emp.is_active ? "bg-success" : "bg-secondary"}`}>
+                  {emp.is_active ? "Active" : "Inactive"}
+                </span>
+              </td>
             </tr>
-          </thead>
+          ))}
+        </tbody>
 
-          <tbody>
-            {employees.map((emp) => (
-              <tr
-                key={emp.ID}
-                style={{ cursor: "pointer" }}
-                onClick={() => onSelect && onSelect(emp)}
-              >
-                <td>{emp.ID}</td>
-                <td>{emp.emri} {emp.mbiemri}</td>
-                <td>@{emp.username}</td>
-                <td>{emp.email}</td>
-                <td>{emp.numri_telefonit}</td>
-                <td>{emp.gjinia}</td>
-
-                <td>
-                  <span
-                    className={`badge ${
-                      emp.is_active ? "bg-success" : "bg-secondary"
-                    }`}
-                  >
-                    {emp.is_active ? "Active" : "Inactive"}
-                  </span>
-                </td>
-
-                <td>
-                  {emp.data_regjistrimit
-                    ? new Date(emp.data_regjistrimit).toLocaleDateString()
-                    : "N/A"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-
-        </table>
-      </div>
+      </table>
 
     </div>
+
   </div>
 );
 }
 
+/* =======================================================
+   REGISTER EMPLOYEE
+======================================================= */
 export function RegisterEmployee() {
   const [loading, setLoading] = useState(false);
 
@@ -289,83 +292,121 @@ export function RegisterEmployee() {
       const data = {
         emri: formData.get("emri"),
         mbiemri: formData.get("mbiemri"),
-        pershkrimi: formData.get("pershkrimi"),
-        gjinia: formData.get("gjinia"),
-        numri_telefonit: formData.get("numri_telefonit"),
-        email: formData.get("email"),
         username: formData.get("username"),
+        email: formData.get("email"),
+        numri_telefonit: formData.get("numri_telefonit"),
+        gjinia: formData.get("gjinia"),
         userpassword: formData.get("userpassword"),
+        pershkrimi: formData.get("pershkrimi"),
       };
 
-      const message = await registerEmployee(data);
-      alert(message);
+      await registerEmployee(data);
+      alert("Employee created!");
       e.target.reset();
     } catch (err) {
-      console.error(err);
-      alert("Failed to register employee.");
+      ExceptionHandler.handle(err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-  <div className="container-fluid py-3">
-
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <h4>Register Employee</h4>
-    </div>
-
-    <div className="bg-white border rounded shadow-sm p-4">
-
-      <div className="row g-3">
-
-        <div className="col-md-6">
-          <label className="form-label">First Name</label>
-          <input className="form-control" name="emri" required />
-        </div>
-
-        <div className="col-md-6">
-          <label className="form-label">Last Name</label>
-          <input className="form-control" name="mbiemri" required />
-        </div>
-
-        <div className="col-md-6">
-          <label className="form-label">Username</label>
-          <input className="form-control" name="username" required />
-        </div>
-
-        <div className="col-md-6">
-          <label className="form-label">Email</label>
-          <input className="form-control" name="email" type="email" required />
-        </div>
-
-        <div className="col-md-6">
-          <label className="form-label">Phone</label>
-          <input className="form-control" name="numri_telefonit" />
-        </div>
-
-        <div className="col-md-6">
-          <label className="form-label">Gender</label>
-          <select className="form-select" name="gjinia">
-            <option value="Mashkull">Male</option>
-            <option value="Femër">Female</option>
-          </select>
-        </div>
-
-        <div className="col-12">
-          <label className="form-label">Description</label>
-          <textarea className="form-control" name="pershkrimi" rows="3"></textarea>
-        </div>
-
-        <div className="col-12 text-end mt-3">
-          <button className="btn btn-primary" type="submit" disabled={loading}>
-            {loading ? "Registering..." : "Create Employee"}
-          </button>
-        </div>
-
+     <div className="w-100">
+      <div className="mb-4">
+        <h3 className="fw-bold mb-1">Register Employee</h3>
+        <small className="text-muted">Create a new employee account</small>
       </div>
 
+      <div className="card border-0 shadow-sm rounded-4">
+        <div className="card-body p-4">
+          <form onSubmit={handleSubmit}>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label className="form-label">First Name</label>
+                <input className="form-control rounded-3" name="emri" required />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Last Name</label>
+                <input
+                  className="form-control rounded-3"
+                  name="mbiemri"
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Username</label>
+                <input
+                  className="form-control rounded-3"
+                  name="username"
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Email</label>
+                <input
+                  className="form-control rounded-3"
+                  type="email"
+                  name="email"
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Phone</label>
+                <input
+                  className="form-control rounded-3"
+                  name="numri_telefonit"
+                  type="tel"
+                  pattern="^\+?[0-9]{8,15}$"
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Password</label>
+                <input
+                  className="form-control rounded-3"
+                  name="userpassword"
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Gender</label>
+                <select
+                  className="form-select rounded-3"
+                  name="gjinia"
+                >
+                  <option value="Mashkull">Male</option>
+                  <option value="Femër">Female</option>
+                </select>
+              </div>
+
+              <div className="col-12">
+                <label className="form-label">Description</label>
+                <textarea
+                  className="form-control rounded-3"
+                  rows="3"
+                  name="pershkrimi"
+                ></textarea>
+              </div>
+
+              <div className="col-12 text-end mt-3">
+                <button
+                  className="btn btn-primary rounded-pill px-4"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? "Creating..." : "Create Employee"}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
 }

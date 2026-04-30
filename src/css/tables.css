@@ -1,0 +1,80 @@
+/* =========================
+   TABLE GLOBAL FIX
+========================= */
+
+/* Make everything stretch fully */
+
+.employees-page {
+    width: 100%;
+}
+
+/* THIS is the missing piece */
+.table-wrapper {
+    width: 100%;
+    display: block;
+}
+
+/* FORCE TABLE FULL STRETCH */
+.custom-table {
+    width: 100% !important;
+    table-layout: fixed;
+}
+
+/* optional: better spacing */
+.custom-table th,
+.custom-table td {
+    padding: 16px 18px;
+}
+
+table {
+    width: 100% !important;
+    border-collapse: collapse;
+}
+
+/* Force Bootstrap containers to NOT shrink layout */
+.card {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.card-body {
+    width: 100%;
+    padding: 16px !important;
+}
+
+/* =========================
+   TABLE STYLE (BIG + CLEAN)
+========================= */
+
+
+/* Row height */
+.custom-table tbody tr {
+    height: 60px;
+}
+
+/* =========================
+   HEADER STYLE (DARK)
+========================= */
+
+.custom-table thead th {
+    background: #333 !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =========================
+   TABLE WRAPPER FIX
+========================= */
+
+.table-responsive {
+    width: 100% !important;
+    display: block;
+}
+
+/* Hover effect */
+.custom-table tbody tr:hover {
+    background: #f5f5f5;
+}

@@ -4,35 +4,48 @@ import { ServiceTable, ViewService, RegisterService } from "./Services";
 import '../css/home.css';
 import { Profile } from "./Porfile";
 
-
 function SideBar({ setActivePage }) {
   return (
-    <div>
-      <div className="mobile-menu-btn">☰</div>
+    <div className="sidebar">
 
-      <div className="sidebar">
+      <button onClick={() => setActivePage("profile")}>
+        <span className="icon">👤</span>
+        <span className="text">Profili</span>
+      </button>
 
-        <button onClick={() => setActivePage("profile")}>
-          <span className="icon">👤</span>
-          <span className="text">Profili</span>
-        </button>
+      <button onClick={() => setActivePage("dashboard")}>
+        <span className="icon">📊</span>
+        <span className="text">Dashboard</span>
+      </button>
 
-        <button onClick={() => setActivePage("dashboard")}>
-          <span className="icon">📊</span>
-          <span className="text">Dashboard</span>
-        </button>
+      <button onClick={() => setActivePage("employees")}>
+        <span className="icon">🏠</span>
+        <span className="text">Stafi</span>
+      </button>
 
-        <button onClick={() => setActivePage("employees")}>
-          <span className="icon">🏠</span>
-          <span className="text">Stafi</span>
-        </button>
+      <button onClick={() => setActivePage("services")}>
+        <span className="icon">🔧</span>
+        <span className="text">Sherbimet</span>
+      </button>
 
-        <button onClick={() => setActivePage("services")}>
-          <span className="icon">🔧</span>
-          <span className="text">Sherbimet</span>
-        </button>
+    </div>
+  );
+}
 
+function TopBar({ onLogout }) {
+  return (
+    <div className="topbar">
+
+      <div className="topbar-title">
+        Admin Panel
       </div>
+
+      <div className="topbar-actions">
+        <button className="logout-btn" onClick={onLogout}>
+          Logout
+        </button>
+      </div>
+
     </div>
   );
 }
@@ -72,12 +85,24 @@ const handleSelectedService = (service) => {
     registerService: <RegisterService />
   };
 
-  return (
+return (
+  <div>
+
+    <TopBar onLogout={() => alert("Logged out")} />
+
     <div className="layout">
+
       <SideBar setActivePage={setActivePage} />
-      <div className="center-content">{pages[activePage] || <h2>Dashboard Page</h2>}</div>
+
+      <div className="center-content">
+        {pages[activePage]}
+      </div>
+
     </div>
-  );
+
+  </div>
+);
+
 }
 
 export default Home; 
