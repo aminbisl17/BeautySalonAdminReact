@@ -6,7 +6,8 @@ import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 function LoginView() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(true); // track auto-login attempt // track backend errors
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(""); // track auto-login attempt // track backend errors
     const navigate = useNavigate();
 
        const API_REFRESH_TOKEN = process.env.REACT_APP_REFRESH_TOKEN;
@@ -47,8 +48,9 @@ function LoginView() {
                 sessionStorage.setItem("userDetails", JSON.stringify(userInfo));
                 navigate("/home");
             } catch (err) {
-                console.error(err);
-                 ExceptionHandler.handle(err);
+               // console.error(err);
+              //   ExceptionHandler.handle(err);
+              alert("Couldnt't connect to server!");
                 setLoading(false); // show form
             }
         };
@@ -57,7 +59,8 @@ function LoginView() {
     }, [navigate]);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+     e.preventDefault();
+    setError(""); 
         try {
             const response = await fetch(
                  API_LOGIN,
@@ -70,7 +73,7 @@ function LoginView() {
             );
 
             if (response.status === 401) {
-                alert("Invalid login");
+               setError("Invalid username or password!"); 
                 return;
             }
 
@@ -86,7 +89,7 @@ function LoginView() {
             );
 
             if (!userRes.ok) {
-                alert("Failed to fetch user data!");
+                setError("Failed to fetch user data!"); 
                 return;
             }
 
@@ -95,8 +98,9 @@ function LoginView() {
 
             navigate("/home");
         } catch (err) {
-            console.error(err);
-            ExceptionHandler.handle(err);
+          //  console.error(err);
+           // ExceptionHandler.handle(err);
+          setError(err); 
         }
     };
 
@@ -106,6 +110,7 @@ function LoginView() {
         <div className="login-container">
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
+                {error && <p className="error-label">{error}</p>}
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input

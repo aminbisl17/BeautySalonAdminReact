@@ -1,108 +1,170 @@
 import { useState } from "react";
 import { EmployeesTable, Employees, RegisterEmployee } from "./Employees";
 import { ServiceTable, ViewService, RegisterService } from "./Services";
+import { Dashboard } from "./Dashboard";
 import '../css/home.css';
 import { Profile } from "./Porfile";
+import { useNavigate } from "react-router-dom";
 
-function SideBar({ setActivePage }) {
+function SideBar({ setActivePage, activePage }) {
   return (
     <div className="sidebar">
 
-      <button onClick={() => setActivePage("profile")}>
-        <span className="icon">👤</span>
-        <span className="text">Profili</span>
+      <button
+        className={activePage === "profile" ? "active" : ""}
+        onClick={() => setActivePage("profile")}
+      >
+        Profili
       </button>
 
-      <button onClick={() => setActivePage("dashboard")}>
-        <span className="icon">📊</span>
-        <span className="text">Dashboard</span>
+      <button
+        className={activePage === "dashboard" ? "active" : ""}
+        onClick={() => setActivePage("dashboard")}
+      >
+        Dashboard
       </button>
 
-      <button onClick={() => setActivePage("employees")}>
-        <span className="icon">🏠</span>
-        <span className="text">Stafi</span>
+      <button
+        className={activePage === "employees" ? "active" : ""}
+        onClick={() => setActivePage("employees")}
+      >
+        Stafi
       </button>
 
-      <button onClick={() => setActivePage("services")}>
-        <span className="icon">🔧</span>
-        <span className="text">Sherbimet</span>
+      <button
+        className={activePage === "services" ? "active" : ""}
+        onClick={() => setActivePage("services")}
+      >
+        Sherbimet
       </button>
 
     </div>
   );
 }
 
-function TopBar({ onLogout }) {
-  return (
-    <div className="topbar">
+function TopBar() {
 
-      <div className="topbar-title">
-        Admin Panel
-      </div>
+    const navigate = useNavigate();
 
-      <div className="topbar-actions">
-        <button className="logout-btn" onClick={onLogout}>
-          Logout
-        </button>
-      </div>
+    const handleLogOut = async () => {
 
-    </div>
-  );
+        const confirmLogout = window.confirm("Are you sure you want to log out?");
+        if (!confirmLogout) return;
+
+        try {
+            const API = process.env.REACT_APP_DELETE_REFRESH_TOKEN;
+
+            const rest = await fetch(API, {
+                method: "POST",
+                credentials: "include",
+            });
+
+            if (rest.ok) {
+                sessionStorage.removeItem("accessToken");
+                sessionStorage.removeItem("userDetails");
+                navigate("/");
+            }
+
+        } catch (err) {
+            alert("Couldn't reach server!");
+        }
+    };
+
+    return (
+        <div className="topbar">
+
+            <div className="topbar-title">
+                Admin Panel
+            </div>
+
+            <div className="topbar-actions">
+                <button className="logout-btn" onClick={handleLogOut}>
+                    Logout
+                </button>
+            </div>
+
+        </div>
+    );
 }
-
 
 function Home() {
   const [activePage, setActivePage] = useState("profile");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const[selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
 
   const handleSelectEmployee = (emp) => {
     setSelectedEmployee(emp);
-    setActivePage("employeeProfile"); // switch page to employee profile
+    setActivePage("employeeProfile");
   };
 
-const handleSelectedService = (service) => {
-  setSelectedService(service); 
-  setActivePage("service");
-};
-  const pages = {
-    profile: <Profile />,
-    dashboard: <h2>Dashboard Page</h2>,
-    employees: (
-      <EmployeesTable
-        onSelect={handleSelectEmployee} 
-        onRegister={() => setActivePage("employeeRegister")}
-      />
-    ),
-    employeeProfile: selectedEmployee ? (
-      <Employees emp={selectedEmployee} />
-    ) : (
-      <h2>No employee selected</h2>
-    ),
-    employeeRegister: <RegisterEmployee />,
-    services: <ServiceTable onSelect={handleSelectedService} onRegister={()=> setActivePage("registerService")} />,
-    service: <ViewService service={selectedService}/>,
-    registerService: <RegisterService />
+  const handleSelectedService = (service) => {
+    setSelectedService(service);
+    setActivePage("service");
   };
 
-return (
-  <div>
+  function renderPage() {
+    switch (activePage) {
 
-    <TopBar onLogout={() => alert("Logged out")} />
+      case "profile":
+        return <Profile />;
 
-    <div className="layout">
+      case "dashboard":
+        return <Dashboard/>;
 
-      <SideBar setActivePage={setActivePage} />
+      case "employees":
+        return (
+          <EmployeesTable
+            onSelect={handleSelectEmployee}
+            onRegister={() => setActivePage("employeeRegister")}
+          />
+        );
 
-      <div className="center-content">
-        {pages[activePage]}
+      case "employeeProfile":
+        return selectedEmployee ? (
+          <Employees emp={selectedEmployee} />
+        ) : (
+          <h2>No employee selected</h2>
+        );
+
+      case "employeeRegister":
+        return <RegisterEmployee />;
+
+      case "services":
+        return (
+          <ServiceTable
+            onSelect={handleSelectedService}
+            onRegister={() => setActivePage("registerService")}
+          />
+        );
+
+      case "service":
+        return <ViewService service={selectedService} />;
+
+      case "registerService":
+        return <RegisterService />;
+
+      default:
+        return <h2>Page not found</h2>;
+    }
+  }
+
+  return (
+    <div>
+
+      <TopBar />
+
+      <div className="layout">
+
+        <SideBar setActivePage={setActivePage} />
+
+        <div className="center-content">
+          {renderPage()}
+        </div>
+
       </div>
 
     </div>
-
-  </div>
-);
-
+  );
 }
 
 export default Home; 

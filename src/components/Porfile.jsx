@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
-import "../css/profile.css";
+import "../css/profile.css"
+
 export function Profile() {
   const [user, setUser] = useState(null);
 
@@ -10,66 +11,62 @@ export function Profile() {
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
-    } catch (Err) {
-      ExceptionHandler.handle(Err);
+    } catch (err) {
+      ExceptionHandler.handle(err);
     }
   }, []);
 
   if (!user) {
     return (
-      <div className="container py-5 text-center">
+      <div className="profile-loading">
         <div className="spinner-border text-primary" />
-        <p className="mt-3">Loading profile...</p>
+        <p>Loading profile...</p>
       </div>
     );
   }
 
- return (
-  <div className="profile-page">
+  return (
+    <div className="profile-page">
 
-    {/* TOP HEADER */}
-    <div className="profile-header-card">
+      {/* HEADER */}
+      <div className="profile-header">
 
-      <div className="profile-user">
-        <div className="avatar">
-          👤
+        <div className="profile-user">
+          <div className="avatar">
+            {user.emri?.charAt(0) || "A"}
+          </div>
+
+          <div>
+            <h5>{user.emri} {user.mbiemri}</h5>
+            <span>@{user.username}</span>
+          </div>
         </div>
 
-        <div>
-          <h4>
-            {user.emri} {user.mbiemri}
-          </h4>
-          <small>@{user.username}</small>
+        <div className="profile-badge">
+          Admin Account
         </div>
+
       </div>
 
-      <span className="badge">Admin Profile</span>
+      {/* GRID */}
+      <div className="profile-grid">
 
-    </div>
+        <div className="profile-card">
+          <h6>Personal Information</h6>
+          <p><b>First Name:</b> {user.emri}</p>
+          <p><b>Last Name:</b> {user.mbiemri}</p>
+          <p><b>Username:</b> @{user.username}</p>
+        </div>
 
-    {/* CONTENT */}
-    <div className="profile-grid">
+        <div className="profile-card">
+          <h6>Account Details</h6>
+          <p><b>User ID:</b> {user.id ?? "N/A"}</p>
+          <p><b>Status:</b> Active</p>
+          <p><b>Registered:</b> {user.dateRegistered ?? "N/A"}</p>
+        </div>
 
-      {/* LEFT */}
-      <div className="profile-card">
-        <h6>Personal Info</h6>
-
-        <p><b>First Name:</b> {user.emri}</p>
-        <p><b>Last Name:</b> {user.mbiemri}</p>
-        <p><b>Username:</b> @{user.username}</p>
-      </div>
-
-      {/* RIGHT */}
-      <div className="profile-card">
-        <h6>Account Details</h6>
-
-        <p><b>User ID:</b> {user.id ?? "N/A"}</p>
-        <p><b>Status:</b> Active</p>
-        <p><b>Registered:</b> {user.dateRegistered ?? "N/A"}</p>
       </div>
 
     </div>
-
-  </div>
-);
+  );
 }

@@ -48,3 +48,9 @@ body {
         button:hover {
             background-color: #0056b3;
         }
+
+        .error-label {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 14px;
+}

@@ -219,27 +219,28 @@ export function EmployeesTable({ onSelect, onRegister }) {
     }
   }
 return (
-  <div className="employees-page">
+  <div className="page">
 
-    {/* TOP PANEL */}
-    <div className="table-header">
+    <div className="page-header">
       <div>
-        <h3 className="fw-bold mb-0">Employees</h3>
-        <small className="text-muted">Manage all staff members</small>
+        <h4 className="mb-0 fw-bold">Employees</h4>
+        <small className="text-muted">
+          Manage staff accounts and permissions
+        </small>
       </div>
 
       <button
         className="btn btn-primary rounded-pill px-4"
         onClick={onRegister}
       >
-        + Register Employee
+        + Add Employee
       </button>
     </div>
 
-    {/* TABLE WRAPPER (KEY FIX) */}
     <div className="table-wrapper">
 
       <table className="custom-table">
+
         <thead>
           <tr>
             <th>ID</th>
@@ -254,16 +255,29 @@ return (
         <tbody>
           {employees.map((emp) => (
             <tr key={emp.ID} onClick={() => onSelect(emp)}>
-              <td>{emp.ID}</td>
-              <td>{emp.emri} {emp.mbiemri}</td>
-              <td>@{emp.username}</td>
-              <td>{emp.email}</td>
-              <td>{emp.numri_telefonit}</td>
+
+              <td>#{emp.ID}</td>
+
               <td>
-                <span className={`badge ${emp.is_active ? "bg-success" : "bg-secondary"}`}>
+                <b>{emp.emri} {emp.mbiemri}</b>
+              </td>
+
+              <td className="text-muted">@{emp.username}</td>
+
+              <td>{emp.email}</td>
+
+              <td>{emp.numri_telefonit}</td>
+
+              <td>
+                <span
+                  className={`badge ${
+                    emp.is_active ? "bg-success" : "bg-secondary"
+                  }`}
+                >
                   {emp.is_active ? "Active" : "Inactive"}
                 </span>
               </td>
+
             </tr>
           ))}
         </tbody>

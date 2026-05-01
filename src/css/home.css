@@ -1,20 +1,15 @@
-/* =========================
-   GLOBAL LAYOUT FIX
-========================= */
-
-.layout {
-    display: flex;
-}
 
 /* =========================
    TOP BAR
 ========================= */
+
 .topbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     height: 60px;
+
     background: #222;
     color: white;
 
@@ -45,80 +40,111 @@
 }
 
 /* =========================
-   SIDEBAR (STATIC)
+   GLOBAL LAYOUT
 ========================= */
-.sidebar {
+
+.layout {
+    display: flex;
+
     position: fixed;
     top: 60px;
     left: 0;
-    width: 200px;
-    height: calc(100vh - 60px);
-    background: #333;
+    right: 0;
+    bottom: 0;
 
+    overflow: hidden;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+/* =========================
+   SIDEBAR MODERN
+========================= */
+
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+
+    height: 100%;
+    padding: 16px 10px;
+
+    background: #0f172a; /* deep modern navy */
     display: flex;
     flex-direction: column;
-    padding-top: 10px;
+    gap: 6px;
+
+    border-right: 1px solid rgba(255,255,255,0.05);
 }
+
+/* =========================
+   BUTTONS
+========================= */
 
 .sidebar button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
     width: 100%;
-    padding: 14px 16px;
+    padding: 12px 14px;
 
-    background: none;
     border: none;
-    color: white;
+    border-radius: 10px;
+
+    background: transparent;
+    color: #cbd5e1;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+
     cursor: pointer;
 
-    text-align: left;
-    font-size: 15px;
+    transition: all 0.2s ease;
 }
 
+/* hover */
 .sidebar button:hover {
-    background: #444;
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    transform: translateX(2px);
 }
 
+/* active state */
+.sidebar button.active {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
+}
+
+/* remove old icon spacing */
 .sidebar .icon {
-    font-size: 18px;
-}
-
-.sidebar .text {
-    opacity: 1;
+    display: none;
 }
 
 /* =========================
-   MAIN CONTENT (FULL FIX)
+   CENTER CONTENT
 ========================= */
+
 .center-content {
-    margin-left: 200px;
-    margin-top: 60px;
-
-    width: calc(100% - 200px);
-    min-height: calc(100vh - 60px);
-
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
     padding: 24px;
-
-    display: block;
+    box-sizing: border-box;
 }
-
-/* FORCE FULL WIDTH INSIDE EVERYTHING */
+/* Ensure pages fill width only (NO flex forcing) */
 .center-content > * {
-    width: 100% !important;
+    width: 100%;
 }
 
 /* =========================
-   MOBILE
+   BOOTSTRAP FIX SAFETY
 ========================= */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 180px;
-    }
 
-    .center-content {
-        margin-left: 180px;
-        width: calc(100% - 180px);
-    }
+.card {
+    width: 100%;
+    max-width: 100%;
 }
+
+.row {
+    width: 100%;
+}
+
