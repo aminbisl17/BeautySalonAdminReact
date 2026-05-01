@@ -50,7 +50,7 @@ function LoginView() {
             } catch (err) {
                // console.error(err);
               //   ExceptionHandler.handle(err);
-              alert("Couldnt't connect to server!");
+              alert("Couldn't connect to server!");
                 setLoading(false); // show form
             }
         };
@@ -100,7 +100,7 @@ function LoginView() {
         } catch (err) {
           //  console.error(err);
            // ExceptionHandler.handle(err);
-          setError(err); 
+          setError(err.message); 
         }
     };
 

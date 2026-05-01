@@ -99,10 +99,7 @@ export function ServiceTable({ onSelect, onRegister }) {
   );
 }
 
-
-
 export function ViewService({ service }) {
-
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ ...service });
@@ -120,7 +117,13 @@ export function ViewService({ service }) {
           ...data,
         }));
 
-        setAttributes(data.atributet || []);
+        setAttributes(
+          (data.atributet || []).map((a) => ({
+            ...a,
+            hours: Math.floor((a.kohezgjatja || 0) / 60),
+            minutes: (a.kohezgjatja || 0) % 60,
+          }))
+        );
       } catch (err) {
         ExceptionHandler.handle(err);
       }
@@ -130,25 +133,45 @@ export function ViewService({ service }) {
   }, [service]);
 
   // =========================
-  // SERVICE INPUT CHANGE
+  // SERVICE DURATION UPDATE
   // =========================
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleServiceDuration = (field, value) => {
+    setForm((prev) => {
+      const hours = field === "hours" ? Number(value) : Number(prev.hours || 0);
+      const minutes =
+        field === "minutes" ? Number(value) : Number(prev.minutes || 0);
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+      return {
+        ...prev,
+        hours,
+        minutes,
+        kohezgjatja: hours * 60 + minutes,
+      };
+    });
   };
 
   // =========================
-  // ATTRIBUTE CHANGE
+  // ATTRIBUTE UPDATE
   // =========================
   const handleAttrChange = (index, field, value) => {
     setAttributes((prev) =>
-      prev.map((attr, i) =>
-        i === index ? { ...attr, [field]: value } : attr
-      )
+      prev.map((attr, i) => {
+        if (i !== index) return attr;
+
+        const updated = {
+          ...attr,
+          [field]: ["qmimi", "zbritja", "hours", "minutes"].includes(field)
+            ? Number(value)
+            : value,
+        };
+
+        const hours = Number(updated.hours || 0);
+        const minutes = Number(updated.minutes || 0);
+
+        updated.kohezgjatja = hours * 60 + minutes;
+
+        return updated;
+      })
     );
   };
 
@@ -162,35 +185,21 @@ export function ViewService({ service }) {
         id_atributit: null,
         opsioni: "",
         pershkrimi: "",
-        kohezgjatja: "",
+        hours: 0,
+        minutes: 0,
+        kohezgjatja: 0,
         qmimi: 0,
         zbritja: 0,
       },
     ]);
   };
 
-  // =========================
-  // DELETE ATTRIBUTE
-  // =========================
   const deleteAttribute = (index) => {
     setAttributes((prev) => prev.filter((_, i) => i !== index));
   };
 
   // =========================
-  // DELETE SERVICE
-  // =========================
-  const handleDelete = async () => {
-    try {
-      const res = await deleteService(service.ID);
-      alert(res);
-      navigate("/", { replace: true });
-    } catch (err) {
-      ExceptionHandler.handle(err);
-    }
-  };
-
-  // =========================
-  // SAVE SERVICE
+  // SAVE
   // =========================
   const handleSave = async () => {
     try {
@@ -199,16 +208,17 @@ export function ViewService({ service }) {
         pershkrimi: form.pershkrimi,
         qmimi_baze: parseFloat(form.qmimi_baze),
         zbritja: parseFloat(form.zbritja),
-        is_active: form.is_active === "true" || form.is_active === true,
+        is_active: form.is_active === true || form.is_active === "true",
+
         kohezgjatja: form.kohezgjatja,
 
         atributet: attributes.map((attr) => ({
           id_atributit: attr.id_atributit ?? null,
           opsioni: attr.opsioni,
           pershkrimi: attr.pershkrimi,
+          qmimi: Number(attr.qmimi),
+          zbritja: Number(attr.zbritja),
           kohezgjatja: attr.kohezgjatja,
-          qmimi: parseFloat(attr.qmimi),
-          zbritja: parseFloat(attr.zbritja),
         })),
       };
 
@@ -220,230 +230,257 @@ export function ViewService({ service }) {
     }
   };
 
-  if (!service) return <div>Loading service...</div>;
+  const handleDelete = async () => {
+    try {
+      const res = await deleteService(service.ID);
+      alert(res);
+      navigate("/", { replace: true });
+    } catch (err) {
+      ExceptionHandler.handle(err);
+    }
+  };
+
+  if (!service) return <div>Loading...</div>;
 
   return (
     <div className="container-fluid py-3">
 
       {/* HEADER */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4>Service Details</h4>
+   <div className="d-flex align-items-center justify-content-between mb-3">
 
-        <button className="btn btn-danger btn-sm" onClick={handleDelete}>
-          Delete
-        </button>
-      </div>
+  <h4 className="mb-0">Service Details</h4>
 
-      {/* MAIN CARD */}
-      <div className="bg-white border rounded shadow-sm p-4">
+  <div className="d-flex gap-2">
+    
+    <button
+      className="btn btn-sm btn-primary w-auto px-3"
+      onClick={handleSave}
+    >
+      Save Changes
+    </button>
 
-        <div className="row g-4">
+    <button
+      className="btn btn-sm btn-outline-danger w-auto px-3"
+      onClick={handleDelete}
+    >
+      Delete
+    </button>
 
-          {/* LEFT */}
-          <div className="col-md-4 text-center border-end">
+  </div>
 
-            <div className="mb-3">
-              {form.imageURL ? (
-                <img
-                  src={form.imageURL}
-                  alt="service"
-                  className="rounded-circle"
-                  style={{
-                    width: "90px",
-                    height: "90px",
-                    objectFit: "cover",
-                  }}
-                />
-              ) : (
-                <div className="fs-1">🛠️</div>
-              )}
-            </div>
+</div>
 
-            <input
-              className="form-control mb-2 text-center"
-              name="emri_sherbimit"
-              value={form.emri_sherbimit || ""}
-              onChange={handleChange}
-            />
+      {/* SERVICE */}
+      <div className="bg-white border rounded p-4 mb-4">
 
-            <span
-              className={`badge ${
-                form.is_active ? "bg-success" : "bg-secondary"
-              }`}
-            >
-              {form.is_active ? "Active" : "Inactive"}
-            </span>
-          </div>
+  <div className="row g-3 align-items-center">
 
-          {/* RIGHT */}
-          <div className="col-md-8">
+    {/* IMAGE */}
+    <div className="col-md-3 text-center">
 
-            <div className="row g-3">
-
-              <div className="col-md-6">
-                <label className="form-label">Price</label>
-                <input
-                  className="form-control"
-                  name="qmimi_baze"
-                  value={form.qmimi_baze || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-6">
-                <label className="form-label">Discount</label>
-                <input
-                  className="form-control"
-                  name="zbritja"
-                  value={form.zbritja || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-12">
-                <label className="form-label">Description</label>
-                <textarea
-                  className="form-control"
-                  name="pershkrimi"
-                  value={form.pershkrimi || ""}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-12 text-end mt-3">
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={handleSave}
-                >
-                  Save Changes
-                </button>
-              </div>
-
-            </div>
-          </div>
+      {form.imageURL ? (
+        <img
+          src={form.imageURL}
+          alt="service"
+          style={{
+            width: "90px",
+            height: "90px",
+            objectFit: "cover",
+            borderRadius: "50%",
+            border: "1px solid #ddd",
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            width: "90px",
+            height: "90px",
+            borderRadius: "50%",
+            border: "1px solid #ddd",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "28px",
+            margin: "0 auto",
+          }}
+        >
+          🛠️
         </div>
-      </div>
+      )}
 
-      {/* =========================
-          ATTRIBUTES SECTION
-      ========================= */}
-      <div className="mt-4 bg-white border rounded shadow-sm p-3">
+    </div>
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
+    {/* INPUTS */}
+    <div className="col-md-9">
 
-          <h6 className="mb-0 text-muted">Attributes</h6>
+      <input
+        className="form-control mb-2"
+        value={form.emri_sherbimit || ""}
+        onChange={(e) =>
+          setForm({ ...form, emri_sherbimit: e.target.value })
+        }
+      />
 
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={addAttribute}
-          >
-            + Add Attribute
-          </button>
+      {/* DURATION */}
+      <div className="row g-2">
 
+        <div className="col-6">
+          <input
+            className="form-control"
+            type="number"
+            value={form.hours || 0}
+            onChange={(e) =>
+              handleServiceDuration("hours", e.target.value)
+            }
+            placeholder="Hours"
+          />
         </div>
 
-        <div className="table-responsive">
-
-          <table className="table table-sm table-hover align-middle">
-
-            <thead className="table-light">
-              <tr>
-                <th>Option</th>
-                <th>Description</th>
-                <th>Duration</th>
-                <th>Price</th>
-                <th>Discount</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {attributes.map((attr, idx) => (
-                <tr key={idx}>
-
-                  <td>
-                    <input
-                      className="form-control form-control-sm"
-                      value={attr.opsioni}
-                      onChange={(e) =>
-                        handleAttrChange(idx, "opsioni", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      className="form-control form-control-sm"
-                      value={attr.pershkrimi}
-                      onChange={(e) =>
-                        handleAttrChange(idx, "pershkrimi", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      className="form-control form-control-sm"
-                      value={attr.kohezgjatja}
-                      onChange={(e) =>
-                        handleAttrChange(idx, "kohezgjatja", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      className="form-control form-control-sm"
-                      value={attr.qmimi}
-                      onChange={(e) =>
-                        handleAttrChange(idx, "qmimi", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      className="form-control form-control-sm"
-                      value={attr.zbritja}
-                      onChange={(e) =>
-                        handleAttrChange(idx, "zbritja", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <button
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() => deleteAttribute(idx)}
-                    >
-                      ✕
-                    </button>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-
-          </table>
+        <div className="col-6">
+          <input
+            className="form-control"
+            type="number"
+            value={form.minutes || 0}
+            onChange={(e) =>
+              handleServiceDuration("minutes", e.target.value)
+            }
+            placeholder="Minutes"
+            min="0"
+            max="59"
+          />
         </div>
+
       </div>
 
     </div>
+
+  </div>
+</div>
+
+      {/* ATTRIBUTES */}
+      <div className="bg-white border rounded p-3">
+
+     <button
+  className="btn btn-sm btn-outline-primary w-auto px-3"
+  onClick={addAttribute}
+>
+  + Add Attribute
+</button>
+
+        <table className="table table-sm">
+
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Duration</th>
+              <th>Price</th>
+              <th>Discount</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {attributes.map((attr, i) => (
+              <tr key={i}>
+
+                <td>
+                  <input
+                    className="form-control form-control-sm"
+                    value={attr.opsioni}
+                    onChange={(e) =>
+                      handleAttrChange(i, "opsioni", e.target.value)
+                    }
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className="form-control form-control-sm"
+                    value={attr.pershkrimi}
+                    onChange={(e) =>
+                      handleAttrChange(i, "pershkrimi", e.target.value)
+                    }
+                  />
+                </td>
+
+                {/* DURATION EDITABLE */}
+                <td>
+                  <div className="d-flex gap-1">
+                    <input
+                      style={{ width: "60px" }}
+                      className="form-control form-control-sm"
+                      value={attr.hours || 0}
+                      onChange={(e) =>
+                        handleAttrChange(i, "hours", e.target.value)
+                      }
+                    />
+
+                    <input
+                      style={{ width: "60px" }}
+                      className="form-control form-control-sm"
+                      value={attr.minutes || 0}
+                      onChange={(e) =>
+                        handleAttrChange(i, "minutes", e.target.value)
+                      }
+                      min="0"
+                      max="59"
+                    />
+                  </div>
+                </td>
+
+                <td>
+                  <input
+                    className="form-control form-control-sm"
+                    value={attr.qmimi}
+                    onChange={(e) =>
+                      handleAttrChange(i, "qmimi", e.target.value)
+                    }
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className="form-control form-control-sm"
+                    value={attr.zbritja}
+                    onChange={(e) =>
+                      handleAttrChange(i, "zbritja", e.target.value)
+                    }
+                  />
+                </td>
+
+                <td>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => deleteAttribute(i)}
+                  >
+                    ✕
+                  </button>
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
+    </div>
   );
 }
-
 export function RegisterService() {
   const [service, setService] = useState({
     emri_sherbimit: "",
     pershkrimi: "",
     qmimi_baze: "",
     zbritja: 0,
-    kohezgjatja: "",
     atributet: [],
+    hours: 0,
+    minutes: 0,
   });
 
   const [image, setImage] = useState(null);
 
+  // ================= SERVICE CHANGE =================
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -453,6 +490,7 @@ export function RegisterService() {
     }));
   };
 
+  // ================= ATTRIBUTES =================
   const addAtribut = () => {
     setService((prev) => ({
       ...prev,
@@ -461,7 +499,9 @@ export function RegisterService() {
         {
           opsioni: "",
           pershkrimi: "",
-          kohezgjatja: "",
+          hours: 0,
+          minutes: 0,
+          kohezgjatja: 0,
           qmimi: 0,
           zbritja: 0,
         },
@@ -476,11 +516,23 @@ export function RegisterService() {
     }));
   };
 
+  // ================= ATTRIBUTE CHANGE =================
   const handleAtributChange = (index, e) => {
     const { name, value } = e.target;
 
     const updated = [...service.atributet];
-    updated[index][name] = value;
+
+    const numericFields = ["qmimi", "zbritja", "hours", "minutes"];
+
+    updated[index][name] = numericFields.includes(name)
+      ? Number(value)
+      : value;
+
+    // duration in minutes
+    const hours = Number(updated[index].hours || 0);
+    const minutes = Number(updated[index].minutes || 0);
+
+    updated[index].kohezgjatja = hours * 60 + minutes;
 
     setService((prev) => ({
       ...prev,
@@ -488,18 +540,33 @@ export function RegisterService() {
     }));
   };
 
+  // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const kohezgjatja =
+      (service.hours || 0) * 60 + (service.minutes || 0);
+
     const formattedData = {
-      ...service,
-      qmimi_baze: parseFloat(service.qmimi_baze),
-      zbritja: parseInt(service.zbritja),
-      atributet: service.atributet.map((a) => ({
-        ...a,
-        qmimi: parseFloat(a.qmimi),
-        zbritja: parseInt(a.zbritja),
-      })),
+      emri_sherbimit: service.emri_sherbimit,
+      pershkrimi: service.pershkrimi,
+      qmimi_baze: Number(service.qmimi_baze),
+      zbritja: Number(service.zbritja),
+
+      kohezgjatja,
+
+      atributet: service.atributet.map((a) => {
+        const attrDuration =
+          (a.hours || 0) * 60 + (a.minutes || 0);
+
+        return {
+          opsioni: a.opsioni,
+          pershkrimi: a.pershkrimi,
+          qmimi: Number(a.qmimi),
+          zbritja: Number(a.zbritja),
+          kohezgjatja: attrDuration,
+        };
+      }),
     };
 
     const response = await registerServices(formattedData, image);
@@ -508,33 +575,73 @@ export function RegisterService() {
 
   return (
     <div className="container-fluid py-3">
-
       <h4 className="mb-3">Register Service</h4>
 
-      <form onSubmit={handleSubmit} className="bg-white border rounded shadow-sm p-4">
-
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border rounded shadow-sm p-4"
+      >
         <div className="row g-3">
 
           <div className="col-md-6">
             <label className="form-label">Service Name</label>
-            <input className="form-control" name="emri_sherbimit" onChange={handleChange} />
+            <input
+              className="form-control"
+              name="emri_sherbimit"
+              onChange={handleChange}
+            />
           </div>
 
           <div className="col-md-6">
             <label className="form-label">Price</label>
-            <input className="form-control" name="qmimi_baze" type="number" onChange={handleChange} />
+            <input
+              className="form-control"
+              name="qmimi_baze"
+              type="number"
+              onChange={handleChange}
+            />
           </div>
 
           <div className="col-12">
             <label className="form-label">Description</label>
-            <textarea className="form-control" name="pershkrimi" onChange={handleChange} />
+            <textarea
+              className="form-control"
+              name="pershkrimi"
+              onChange={handleChange}
+            />
           </div>
 
+          {/* DURATION */}
           <div className="col-md-6">
             <label className="form-label">Duration</label>
-            <input className="form-control" name="kohezgjatja" onChange={handleChange} />
+
+            <div className="row g-2">
+              <div className="col-6">
+                <input
+                  type="number"
+                  className="form-control"
+                  name="hours"
+                  min="0"
+                  placeholder="Hours"
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="col-6">
+                <input
+                  type="number"
+                  className="form-control"
+                  name="minutes"
+                  min="0"
+                  max="59"
+                  placeholder="Minutes"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
           </div>
 
+          {/* IMAGE */}
           <div className="col-md-6">
             <label className="form-label">Image</label>
             <input
@@ -546,9 +653,9 @@ export function RegisterService() {
 
         </div>
 
-        {/* ================= ATTRIBUTES ================= */}
         <hr className="my-4" />
 
+        {/* ATTRIBUTES */}
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h5 className="mb-0">Attributes</h5>
 
@@ -565,83 +672,94 @@ export function RegisterService() {
           <p className="text-muted">No attributes added yet</p>
         )}
 
-       {service.atributet.map((atribut, index) => (
-  <div key={index} className="border rounded-3 p-3 mb-3 bg-light">
+        {service.atributet.map((atribut, index) => (
+          <div key={index} className="border rounded-3 p-3 mb-3 bg-light">
 
-    {/* HEADER ROW */}
-    <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="d-flex justify-content-between mb-3">
+              <strong>Attribute #{index + 1}</strong>
 
-      <strong className="text-muted">
-        Attribute #{index + 1}
-      </strong>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-danger"
+                onClick={() => removeAtribut(index)}
+              >
+                Remove
+              </button>
+            </div>
 
-      <button
-        type="button"
-        className="btn btn-sm btn-outline-danger"
-        onClick={() => removeAtribut(index)}
-      >
-        Remove
-      </button>
+            <div className="row g-2">
 
-    </div>
+              <div className="col-md-4">
+                <input
+                  className="form-control"
+                  name="opsioni"
+                  placeholder="Opsioni"
+                  value={atribut.opsioni}
+                  onChange={(e) => handleAtributChange(index, e)}
+                />
+              </div>
 
-    {/* INPUT GRID */}
-    <div className="row g-2">
+              <div className="col-md-4">
+                <input
+                  className="form-control"
+                  name="pershkrimi"
+                  placeholder="Pershkrimi"
+                  value={atribut.pershkrimi}
+                  onChange={(e) => handleAtributChange(index, e)}
+                />
+              </div>
 
-      <div className="col-md-4">
-        <input
-          className="form-control"
-          name="opsioni"
-          placeholder="Opsioni"
-          value={atribut.opsioni}
-          onChange={(e) => handleAtributChange(index, e)}
-        />
-      </div>
+              <div className="col-md-4">
+                <div className="row g-2">
 
-      <div className="col-md-4">
-        <input
-          className="form-control"
-          name="pershkrimi"
-          placeholder="Pershkrimi"
-          value={atribut.pershkrimi}
-          onChange={(e) => handleAtributChange(index, e)}
-        />
-      </div>
+                  <div className="col-6">
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="hours"
+                      placeholder="Hours"
+                      value={atribut.hours || 0}
+                      onChange={(e) => handleAtributChange(index, e)}
+                    />
+                  </div>
 
-      <div className="col-md-4">
-        <input
-          className="form-control"
-          name="kohezgjatja"
-          placeholder="Kohezgjatja"
-          value={atribut.kohezgjatja}
-          onChange={(e) => handleAtributChange(index, e)}
-        />
-      </div>
+                  <div className="col-6">
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="minutes"
+                      placeholder="Minutes"
+                      value={atribut.minutes || 0}
+                      onChange={(e) => handleAtributChange(index, e)}
+                    />
+                  </div>
 
-      <div className="col-md-6">
-        <input
-          className="form-control"
-          name="qmimi"
-          placeholder="Qmimi"
-          value={atribut.qmimi}
-          onChange={(e) => handleAtributChange(index, e)}
-        />
-      </div>
+                </div>
+              </div>
 
-      <div className="col-md-6">
-        <input
-          className="form-control"
-          name="zbritja"
-          placeholder="Zbritja"
-          value={atribut.zbritja}
-          onChange={(e) => handleAtributChange(index, e)}
-        />
-      </div>
+              <div className="col-md-6">
+                <input
+                  className="form-control"
+                  name="qmimi"
+                  placeholder="Qmimi"
+                  value={atribut.qmimi}
+                  onChange={(e) => handleAtributChange(index, e)}
+                />
+              </div>
 
-    </div>
+              <div className="col-md-6">
+                <input
+                  className="form-control"
+                  name="zbritja"
+                  placeholder="Zbritja"
+                  value={atribut.zbritja}
+                  onChange={(e) => handleAtributChange(index, e)}
+                />
+              </div>
 
-  </div>
-))}
+            </div>
+          </div>
+        ))}
 
         <div className="text-end">
           <button className="btn btn-primary mt-3" type="submit">
