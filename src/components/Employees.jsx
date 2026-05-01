@@ -77,16 +77,25 @@ export function Employees({ emp }) {
 
   return (
      <div className="w-100">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex align-items-center justify-content-between mb-3">
         <div>
           <h3 className="fw-bold mb-1">Employee Profile</h3>
           <small className="text-muted">Manage employee details</small>
         </div>
 
-        <button className="btn btn-danger rounded-pill px-4" onClick={deleteEmp}>
+<div className="d-flex gap-2">
+            <button
+                    className="btn btn-sm btn-primary w-auto px-3"
+                    onClick={save}
+                    disabled={loading}
+                  >
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+
+        <button className="btn btn-sm btn-outline-danger w-auto px-3" onClick={deleteEmp}>
           Delete
         </button>
-      </div>
+      </div></div>
 
       <div className="card border-0 shadow-sm rounded-4">
         <div className="card-body p-4">
@@ -180,16 +189,6 @@ export function Employees({ emp }) {
                     value={emp.ID}
                     readOnly
                   />
-                </div>
-
-                <div className="col-12 text-end mt-3">
-                  <button
-                    className="btn btn-primary rounded-pill px-4"
-                    onClick={save}
-                    disabled={loading}
-                  >
-                    {loading ? "Saving..." : "Save Changes"}
-                  </button>
                 </div>
               </div>
             </div>
