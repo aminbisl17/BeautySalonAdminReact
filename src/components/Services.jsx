@@ -26,19 +26,20 @@ export function ServiceTable({ onSelect, onRegister }) {
       <div className="page-header">
 
         <div>
-          <h4 className="mb-0 fw-bold">Services</h4>
+          <h4 className="mb-0 fw-bold">Shërbimet</h4>
           <small className="text-muted">
-            Manage service offerings
+            Menaxhoni ofertat e shërbimeve
           </small>
         </div>
 
+<div className="d-flex gap-2">
         <button
-          className="btn btn-primary rounded-pill px-4"
+          className="btn btn-sm btn-primary w-auto px-3"
           onClick={onRegister}
         >
           + Add Service
         </button>
-
+</div>
       </div>
 
       {/* TABLE */}
@@ -49,13 +50,13 @@ export function ServiceTable({ onSelect, onRegister }) {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Duration</th>
-              <th>Price</th>
-              <th>Discount</th>
-              <th>Description</th>
-              <th>Created</th>
+              <th>Emri i shërbimit</th>
+              <th>Gjendja</th>
+              <th>Kohëzgjatja</th>
+              <th>Çmimi</th>
+              <th>Zbritja</th>
+              <th>Përshkrimi</th>
+              <th>Data e krijimit</th>
             </tr>
           </thead>
 
@@ -243,8 +244,8 @@ export function ViewService({ service }) {
   if (!service) return <div>Loading...</div>;
 
   return (
-    <div className="container-fluid py-3">
-
+ //   <div className="container-fluid py-3">
+ <div className="w-100">
       {/* HEADER */}
    <div className="d-flex align-items-center justify-content-between mb-3">
 
@@ -312,7 +313,7 @@ export function ViewService({ service }) {
 
     {/* INPUTS */}
     <div className="col-md-9">
-
+  <label className="form-label">Emri i sherbimit</label>
       <input
         className="form-control mb-2"
         value={form.emri_sherbimit || ""}
@@ -322,35 +323,37 @@ export function ViewService({ service }) {
       />
 
       {/* DURATION */}
-      <div className="row g-2">
+     <div className="row g-2">
 
-        <div className="col-6">
-          <input
-            className="form-control"
-            type="number"
-            value={form.hours || 0}
-            onChange={(e) =>
-              handleServiceDuration("hours", e.target.value)
-            }
-            placeholder="Hours"
-          />
-        </div>
+  <div className="col-6">
+    <label className="form-label">Orë</label>
+    <input
+      className="form-control"
+      type="number"
+      value={form.hours || 0}
+      onChange={(e) =>
+        handleServiceDuration("hours", e.target.value)
+      }
+      placeholder="Hours"
+    />
+  </div>
 
-        <div className="col-6">
-          <input
-            className="form-control"
-            type="number"
-            value={form.minutes || 0}
-            onChange={(e) =>
-              handleServiceDuration("minutes", e.target.value)
-            }
-            placeholder="Minutes"
-            min="0"
-            max="59"
-          />
-        </div>
+  <div className="col-6">
+    <label className="form-label">Minuta</label>
+    <input
+      className="form-control"
+      type="number"
+      value={form.minutes || 0}
+      onChange={(e) =>
+        handleServiceDuration("minutes", e.target.value)
+      }
+      placeholder="Minutes"
+      min="0"
+      max="59"
+    />
+  </div>
 
-      </div>
+</div>
 
     </div>
 

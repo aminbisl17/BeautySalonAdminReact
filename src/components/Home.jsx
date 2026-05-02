@@ -21,7 +21,7 @@ function SideBar({ setActivePage, activePage }) {
         className={activePage === "dashboard" ? "active" : ""}
         onClick={() => setActivePage("dashboard")}
       >
-        Dashboard
+       Raportet financiare
       </button>
 
       <button
@@ -35,7 +35,7 @@ function SideBar({ setActivePage, activePage }) {
         className={activePage === "services" ? "active" : ""}
         onClick={() => setActivePage("services")}
       >
-        Sherbimet
+        Shërbimet
       </button>
 
     </div>
@@ -70,21 +70,23 @@ function TopBar() {
         }
     };
 
-    return (
-        <div className="topbar">
+return (
+  <div className="topbar">
 
-            <div className="topbar-title">
-                Admin Panel
-            </div>
+    <div className="topbar-title">
+      Admin Panel
+    </div>
 
-            <div className="topbar-actions">
-                <button className="logout-btn" onClick={handleLogOut}>
-                    Logout
-                </button>
-            </div>
+    <button
+      className="logout-btn"
+      onClick={handleLogOut}
+    >
+      Logout
+    </button>
 
-        </div>
-    );
+  </div>
+
+);
 }
 
 function Home() {

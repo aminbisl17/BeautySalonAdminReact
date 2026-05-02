@@ -26,47 +26,71 @@ export function Profile() {
   }
 
   return (
-    <div className="profile-page">
+  <div className="profile-page">
 
-      {/* HEADER */}
-      <div className="profile-header">
+    {/* HEADER */}
+    <div className="profile-header">
 
-        <div className="profile-user">
-          <div className="avatar">
-            {user.emri?.charAt(0) || "A"}
-          </div>
-
-          <div>
-            <h5>{user.emri} {user.mbiemri}</h5>
-            <span>@{user.username}</span>
-          </div>
+      <div className="profile-user">
+        <div className="avatar">
+          {user.emri?.charAt(0)?.toUpperCase() || "A"}
         </div>
 
-        <div className="profile-badge">
-          Admin Account
+        <div className="profile-user-info">
+          <h5>{user.emri} {user.mbiemri}</h5>
+          <span>@{user.username}</span>
         </div>
-
       </div>
 
-      {/* GRID */}
-      <div className="profile-grid">
-
-        <div className="profile-card">
-          <h6>Personal Information</h6>
-          <p><b>First Name:</b> {user.emri}</p>
-          <p><b>Last Name:</b> {user.mbiemri}</p>
-          <p><b>Username:</b> @{user.username}</p>
-        </div>
-
-        <div className="profile-card">
-          <h6>Account Details</h6>
-          <p><b>User ID:</b> {user.id ?? "N/A"}</p>
-          <p><b>Status:</b> Active</p>
-          <p><b>Registered:</b> {user.dateRegistered ?? "N/A"}</p>
-        </div>
-
+      <div className="profile-badge">
+        Admin Account
       </div>
 
     </div>
-  );
+
+    {/* GRID */}
+    <div className="profile-grid">
+
+      <div className="profile-card">
+        <h6>Informacion Personal</h6>
+
+        <div className="profile-row">
+          <span>Emri</span>
+          <b>{user.emri}</b>
+        </div>
+
+        <div className="profile-row">
+          <span>Mbiemri</span>
+          <b>{user.mbiemri}</b>
+        </div>
+
+        <div className="profile-row">
+          <span>Username</span>
+          <b>@{user.username}</b>
+        </div>
+      </div>
+
+      <div className="profile-card">
+        <h6>Detajet e Llogarisë</h6>
+
+        <div className="profile-row">
+          <span>User ID</span>
+          <b>{user.id ?? "N/A"}</b>
+        </div>
+
+        <div className="profile-row">
+          <span>Statusi</span>
+          <b className="status-active">Aktiv</b>
+        </div>
+
+        <div className="profile-row">
+          <span>Regjistruar</span>
+          <b>{user.dateRegistered ?? "N/A"}</b>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+);
 }

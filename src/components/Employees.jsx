@@ -222,19 +222,22 @@ return (
 
     <div className="page-header">
       <div>
-        <h4 className="mb-0 fw-bold">Employees</h4>
+        <h4 className="mb-0 fw-bold">Stafi</h4>
         <small className="text-muted">
-          Manage staff accounts and permissions
+         Menaxho llogaritë dhe lejet e stafit
         </small>
       </div>
 
-      <button
-        className="btn btn-primary rounded-pill px-4"
+      
+<div className="d-flex gap-2">
+            <button
+                    className="btn btn-sm btn-primary w-auto px-3"
         onClick={onRegister}
       >
         + Add Employee
       </button>
     </div>
+</div>
 
     <div className="table-wrapper">
 
@@ -243,11 +246,11 @@ return (
         <thead>
           <tr>
             <th>ID</th>
-            <th>Full Name</th>
-            <th>Username</th>
+            <th>Emri & Mbiemri</th>
+            <th>Emri i përdoruesit</th>
             <th>Email</th>
-            <th>Phone</th>
-            <th>Status</th>
+            <th>Numri i telefonit</th>
+            <th>Gjendja</th>
           </tr>
         </thead>
 

@@ -4,8 +4,6 @@
 
 .dashboard-page {
     width: 100%;
-    padding: 20px;
-    background: #f4f6fb;
     min-height: 100%;
     display: flex;
     flex-direction: column;
