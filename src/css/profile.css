@@ -92,15 +92,18 @@
     color: #0f172a;
 }
 
-/* ROW */
+/* ROW  */
 .profile-row {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+
     padding: 8px 0;
-
     border-bottom: 1px solid #f1f5f9;
-}
 
+    gap: 12px;
+}
+ 
 .profile-row:last-child {
     border-bottom: none;
 }
@@ -113,9 +116,70 @@
 .profile-row b {
     font-size: 13px;
     color: #0f172a;
+
+    display: flex;
+    align-items: center;
 }
 
 /* STATUS */
 .status-active {
     color: #22c55e;
+}
+
+.profile-input {
+    width: 100%;
+    height: 34px;
+
+    font-size: 13px;
+    color: #0f172a;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    padding: 6px 10px;
+
+    background: #fff;
+
+    transition: all 0.2s ease;
+}
+
+/* focus state */
+.profile-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.profile-actions {
+    display: flex;
+    align-items: center;
+}
+
+.profile-actions-group {
+    display: flex;
+    gap: 10px;
+}
+
+.profile-btn {
+    border-radius: 10px;
+    font-size: 13px;
+    padding: 6px 14px;
+
+    transition: all 0.2s ease;
+}
+
+/* hover polish */
+.profile-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* make edit button stand out less harshly */
+.btn-primary.profile-btn {
+    background: #4f46e5;
+    border: none;
+}
+
+.btn-success.profile-btn {
+    background: #22c55e;
+    border: none;
 }

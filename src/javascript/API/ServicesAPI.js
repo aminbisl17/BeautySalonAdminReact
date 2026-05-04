@@ -91,7 +91,7 @@ export async function registerServices(data, imageFile) {
 
   try {
     const response = await fetch(
-      "http://localhost:8000/api/admin/sherbimet/register",
+      API,
       {
         method: "POST",
         headers: {
@@ -110,24 +110,45 @@ export async function registerServices(data, imageFile) {
     return false;
   }
 }
+export async function updateService(id, form) {
+  const API = process.env.REACT_APP_SERVICES_UPDATE;
+  const token = sessionStorage.getItem("accessToken");
 
-export async function updateService(id,data){
-const API = process.env.REACT_APP_SERVICES_UPDATE;
-    const token = sessionStorage.getItem("accessToken");
+  try {
+    // ✅ Build JSON data part
+    const data = {
+      emri_sherbimit: form.emri_sherbimit,
+      pershkrimi: form.pershkrimi,
+      qmimi_baze: parseFloat(form.qmimi_baze),
+      zbritja: parseFloat(form.zbritja),
+      is_active: Boolean(form.is_active),
+      kohezgjatja: form.kohezgjatja,
+      atributet: form.atributet,
+      removeImage: form.removeImage || false
+    };
 
-  try{
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
 
-    const response = await fetch(`${API + id}`,
-      {
-        method: "PUT",
-        headers:{"Content-Type": "application/json" ,
-            "Authorization": `Bearer ${token}`},
-        body: JSON.stringify(data)});
+    
+    if (form.imageFile) {
+      formData.append("image", form.imageFile);
+    }
+
+    const response = await fetch(`${API + id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`
+       
+      },
+      body: formData
+    });
 
     if (response.status === 401) throw new TokenException();
-    
+
     return true;
-  }catch(err){
+
+  } catch (err) {
     ExceptionHandler.handle(err);
     return false;
   }

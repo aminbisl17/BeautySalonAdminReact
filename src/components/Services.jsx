@@ -202,40 +202,28 @@ export function ViewService({ service }) {
   // =========================
   // SAVE
   // =========================
+
   const handleSave = async () => {
-    try {
-      const updatedService = {
-        emri_sherbimit: form.emri_sherbimit,
-        pershkrimi: form.pershkrimi,
-        qmimi_baze: parseFloat(form.qmimi_baze),
-        zbritja: parseFloat(form.zbritja),
-        is_active: form.is_active === true || form.is_active === "true",
+  try {
+    const success = await updateService(service.ID, form);
 
-        kohezgjatja: form.kohezgjatja,
-
-        atributet: attributes.map((attr) => ({
-          id_atributit: attr.id_atributit ?? null,
-          opsioni: attr.opsioni,
-          pershkrimi: attr.pershkrimi,
-          qmimi: Number(attr.qmimi),
-          zbritja: Number(attr.zbritja),
-          kohezgjatja: attr.kohezgjatja,
-        })),
-      };
-
-      const success = await updateService(form.ID, updatedService);
-
-      if (success) alert("Service updated successfully!");
-    } catch (err) {
-      ExceptionHandler.handle(err);
+    if (success) {
+      alert("Service updated successfully");
+    } else {
+      alert("Update failed");
     }
-  };
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  }
+};
 
   const handleDelete = async () => {
     try {
       const res = await deleteService(service.ID);
       alert(res);
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     } catch (err) {
       ExceptionHandler.handle(err);
     }
@@ -277,39 +265,84 @@ export function ViewService({ service }) {
   <div className="row g-3 align-items-center">
 
     {/* IMAGE */}
-    <div className="col-md-3 text-center">
+  <div className="col-md-3 text-center">
 
-      {form.imageURL ? (
-        <img
-          src={form.imageURL}
-          alt="service"
-          style={{
-            width: "90px",
-            height: "90px",
-            objectFit: "cover",
-            borderRadius: "50%",
-            border: "1px solid #ddd",
-          }}
-        />
-      ) : (
-        <div
-          style={{
-            width: "90px",
-            height: "90px",
-            borderRadius: "50%",
-            border: "1px solid #ddd",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "28px",
-            margin: "0 auto",
-          }}
-        >
-          🛠️
-        </div>
-      )}
+  <label style={{ cursor: "pointer", position: "relative" }}>
 
-    </div>
+    {form.imageURL ? (
+      <img
+        src={form.imageURL}
+        alt="service"
+        style={{
+          width: "90px",
+          height: "90px",
+          objectFit: "cover",
+          borderRadius: "50%",
+          border: "1px solid #ddd",
+        }}
+      />
+    ) : (
+      <div
+        style={{
+          width: "90px",
+          height: "90px",
+          borderRadius: "50%",
+          border: "1px solid #ddd",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "28px",
+          margin: "0 auto",
+        }}
+      >
+        🛠️
+      </div>
+    )}
+
+    {/* hidden file input */}
+    <input
+      type="file"
+      accept="image/*"
+      style={{ display: "none" }}
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const preview = URL.createObjectURL(file);
+
+          setForm({
+            ...form,
+            imageURL: preview,
+            imageFile: file,
+            removeImage: false // reset delete flag
+          });
+        }
+      }}
+    />
+  </label>
+
+  {/* 🔥 DELETE BUTTON */}
+  {form.imageURL && (
+    <button
+      type="button"
+      className="btn btn-sm btn-danger mt-2"
+      onClick={() => {
+        setForm({
+          ...form,
+          imageURL: null,
+          imageFile: null,
+          removeImage: true
+        });
+      }}
+    >
+      Remove Image
+    </button>
+  )}
+
+  <div style={{ fontSize: "12px", marginTop: "6px", color: "#777" }}>
+    Click image to change
+  </div>
+
+</div>
 
     {/* INPUTS */}
     <div className="col-md-9">
@@ -352,6 +385,29 @@ export function ViewService({ service }) {
       max="59"
     />
   </div>
+
+<div className="form-check form-switch mt-3">
+  <input
+    className="form-check-input"
+    type="checkbox"
+    role="switch"
+    checked={form.is_active || false}
+    onChange={(e) => {
+      const newValue = e.target.checked;
+
+      const confirmed = window.confirm(
+        `Are you sure you want to ${newValue ? "enable" : "disable"} this service?`
+      );
+
+      if (confirmed) {
+        setForm({ ...form, is_active: newValue });
+      }
+    }}
+  />
+  <label className="form-check-label">
+    {form.is_active ? "Aktiv" : "Jo Aktiv"}
+  </label>
+</div>
 
 </div>
 
