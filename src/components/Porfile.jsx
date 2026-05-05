@@ -45,6 +45,13 @@ export function Profile() {
   }
 
   const handleUpdate = async () => {
+
+      const confirmUpdate = window.confirm("Are you sure you want to update your profile?");
+
+  if (!confirmUpdate) {
+    return; 
+  }
+
     try {
       const updatedUser = {
         ...user,
@@ -67,7 +74,6 @@ export function Profile() {
     }
   };
 
-  // ---------------- FIELD RENDERER ----------------
   const renderField = (label, value, key, type = "text") => (
     <div className="profile-row">
       <span>{label}</span>

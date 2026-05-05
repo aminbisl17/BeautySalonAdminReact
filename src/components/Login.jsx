@@ -100,7 +100,7 @@ function LoginView() {
         } catch (err) {
           //  console.error(err);
            // ExceptionHandler.handle(err);
-          setError(err.message); 
+          setError("Couldn't reach server!"); 
         }
     };
 

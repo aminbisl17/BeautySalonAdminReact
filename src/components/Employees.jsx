@@ -52,6 +52,9 @@ export function Employees({ emp }) {
   };
 
   const save = async () => {
+
+    if (!window.confirm("Are you sure you want to update this employee?")) return
+
     setLoading(true);
 
     const updatedEmp = {

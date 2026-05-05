@@ -104,6 +104,10 @@ function Home() {
     setActivePage("service");
   };
 
+  const handleRegisteredOrDeletedService = () => {
+      setActivePage("services");
+  }
+
   function renderPage() {
     switch (activePage) {
 
@@ -140,10 +144,10 @@ function Home() {
         );
 
       case "service":
-        return <ViewService service={selectedService} />;
+        return <ViewService service={selectedService} onDelete={handleRegisteredOrDeletedService}/>;
 
       case "registerService":
-        return <RegisterService />;
+        return <RegisterService onRegister={handleRegisteredOrDeletedService} />;
 
       default:
         return <h2>Page not found</h2>;
