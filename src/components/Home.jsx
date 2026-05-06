@@ -48,7 +48,7 @@ function TopBar() {
 
     const handleLogOut = async () => {
 
-        const confirmLogout = window.confirm("Are you sure you want to log out?");
+        const confirmLogout = window.confirm("Dëshironi të dilni?");
         if (!confirmLogout) return;
 
         try {
@@ -74,14 +74,14 @@ return (
   <div className="topbar">
 
     <div className="topbar-title">
-      Admin Panel
+      Paneli i administratorit
     </div>
 
     <button
       className="logout-btn"
       onClick={handleLogOut}
     >
-      Logout
+    Dilni
     </button>
 
   </div>
