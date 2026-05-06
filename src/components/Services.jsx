@@ -71,7 +71,7 @@ export function ServiceTable({ onSelect, onRegister }) {
 
                 <td>
                   <span className={`badge ${ser.is_active ? "bg-success" : "bg-secondary"}`}>
-                    {ser.is_active ? "Aktiv" : "Jo Aktiv"}
+                    {ser.is_active ? "Aktiv" : "Jo-Aktiv"}
                   </span>
                 </td>
 
@@ -239,9 +239,9 @@ const handleSave = async () => {
     const success = await updateService(service.ID, payload);
 
     if (success) {
-      alert("Service updated successfully");
+      alert("Të dhënat u përditësuan!");
     } else {
-      alert("Update failed");
+      alert("Dështim");
     }
   } catch (err) {
     console.error(err);
@@ -250,7 +250,7 @@ const handleSave = async () => {
 };
 
   const handleDelete = async () => {
-  if (!window.confirm("Fshij këtë shërbim?")) return;
+  if (!window.confirm("Fshi këtë shërbim?")) return;
 
   try {
     await deleteService(service.ID);
@@ -284,19 +284,19 @@ const handleSave = async () => {
  
   <div className="d-flex gap-2">
     
-    <button
-      className="btn btn-sm btn-primary w-auto px-3"
+<button
+  className="btn btn-sm btn-primary w-auto px-3"
       onClick={handleSave}
     >
       Ruaj ndryshimet
-    </button>
+</button>
 
-    <button
-      className="btn btn-danger btn-sm w-auto px-3"
-      onClick={handleDelete}
-    >
-      Fshi shërbimin
-    </button>
+<button
+  className="btn btn-danger btn-sm w-auto px-3"
+  onClick={handleDelete}
+>
+  Fshi shërbimin
+</button>
 
   </div>
 

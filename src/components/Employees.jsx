@@ -40,11 +40,11 @@ export function Employees({ emp }) {
   if (!emp) return <div className="container-xl py-4">No employee selected</div>;
 
   const deleteEmp = async () => {
-    if (!window.confirm("Delete this employee?")) return;
+    if (!window.confirm("Fshi këtë punonjës?")) return;
 
     try {
       await deleteEmployee(emp.ID);
-      alert("Employee deleted");
+      alert("Punonjësi u fshi!");
       navigate("/", { replace: true });
     } catch (err) {
       ExceptionHandler.handle(err);
@@ -53,7 +53,7 @@ export function Employees({ emp }) {
 
   const save = async () => {
 
-    if (!window.confirm("Are you sure you want to update this employee?")) return
+    if (!window.confirm("Përditësoni të dhënat?")) return
 
     setLoading(true);
 
@@ -70,7 +70,7 @@ export function Employees({ emp }) {
 
     try {
       await updateEmployee(emp.ID, updatedEmp);
-      alert("Employee updated successfully!");
+      alert("Të dhënat u përditësuan!");
     } catch (err) {
       ExceptionHandler.handle(err);
     } finally {
@@ -78,52 +78,95 @@ export function Employees({ emp }) {
     }
   };
 
-  return (
-     <div className="w-100">
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <div>
-          <h3 className="fw-bold mb-1">Employee Profile</h3>
-          <small className="text-muted">Manage employee details</small>
+return (
+  <div className="w-100">
+
+    {/* HEADER */}
+    <div className="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h3 className="fw-bold mb-1">{emp.emri}</h3>
+        <small className="text-muted">Menaxhoni detajet e punonjësve</small>
+      </div>
+
+    <div className="d-flex gap-2">
+     <button
+  className="btn btn-sm btn-primary w-auto px-3"
+
+  onClick={save}
+  disabled={loading}
+>
+  {loading ? "Duke u përditësuar..." : "Ruaj ndryshimet"}
+</button>
+
+<button
+   className="btn btn-danger btn-sm w-auto px-3"
+
+  onClick={deleteEmp}
+>
+  Fshi punonjësin
+</button>
+      </div>
+    </div>
+
+    {/* CARD */}
+    <div className="card border-0 shadow-sm rounded-4 p-4">
+      <div className="row g-4">
+
+        {/* LEFT SIDEBAR (PROFILE SUMMARY) */}
+        <div className="col-md-4 border-end pe-4">
+
+          <div className="text-center">
+            <div
+              className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+              style={{ width: 90, height: 90, fontSize: 28, fontWeight: "bold" }}
+            >
+              {emp.emri?.charAt(0)}
+            </div>
+
+            <h5 className="mb-1">{emp.emri}</h5>
+            <p className="text-muted mb-3">{email}</p>
+
+            <span className={`badge ${status === "true" ? "bg-success" : "bg-secondary"}`}>
+              {status === "true" ? "Aktiv" : "Jo-Aktiv"}
+            </span>
+          </div>
+
+          <hr className="my-4" />
+
+          <div className="small text-muted">
+            <div className="mb-2">
+              <strong>ID:</strong> {emp.ID}
+            </div>
+            <div className="mb-2">
+              <strong>Role:</strong> Employee
+            </div>
+          </div>
         </div>
 
-<div className="d-flex gap-2">
-            <button
-                    className="btn btn-sm btn-primary w-auto px-3"
-                    onClick={save}
-                    disabled={loading}
-                  >
-                    {loading ? "Saving..." : "Save Changes"}
-                  </button>
+        {/* RIGHT SIDE (FORM) */}
+        <div className="col-md-8">
+          <div className="row g-3">
 
-        <button className="btn btn-sm btn-outline-danger w-auto px-3" onClick={deleteEmp}>
-          Delete
-        </button>
-      </div></div>
-
-      <div className="card border-0 shadow-sm rounded-4">
-        <div className="card-body p-4">
-          <div className="row g-4">
-            {/* LEFT */}
-            <div className="col-md-4 border-end text-center">
-              <div
-                className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
-                style={{ width: 90, height: 90, fontSize: 34 }}
-              >
-                👤
-              </div>
-
+            <div className="col-md-6">
+              <label className="form-label">Emri</label>
               <input
-                className="form-control rounded-3 mb-2"
+                className="form-control rounded-3"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
+            </div>
 
+            <div className="col-md-6">
+              <label className="form-label">Mbiemri</label>
               <input
-                className="form-control rounded-3 mb-2"
+                className="form-control rounded-3"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
+            </div>
 
+            <div className="col-md-6">
+              <label className="form-label">Emri i përdoruesit</label>
               <input
                 className="form-control rounded-3"
                 value={username}
@@ -131,75 +174,73 @@ export function Employees({ emp }) {
               />
             </div>
 
-            {/* RIGHT */}
-            <div className="col-md-8">
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label">Email</label>
-                  <input
-                    className="form-control rounded-3"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Phone</label>
-                  <input
-                    className="form-control rounded-3"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Password</label>
-                  <input
-                    className="form-control rounded-3"
-                    value={userpassword}
-                    onChange={(e) => setUserpassword(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Gender</label>
-                  <select
-                    className="form-select rounded-3"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                  >
-                    <option value="Mashkull">Male</option>
-                    <option value="Femër">Female</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Status</label>
-                  <select
-                    className="form-select rounded-3"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Employee ID</label>
-                  <input
-                    className="form-control rounded-3"
-                    value={emp.ID}
-                    readOnly
-                  />
-                </div>
-              </div>
+            <div className="col-md-6">
+              <label className="form-label">Email</label>
+              <input
+                className="form-control rounded-3"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Numri i telefonit</label>
+              <input
+                className="form-control rounded-3"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Fjalkalimi</label>
+              <input
+                className="form-control rounded-3"
+                value={userpassword}
+                onChange={(e) => setUserpassword(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Gjinia</label>
+              <select
+                className="form-select rounded-3"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="Mashkull">Mashkull</option>
+                <option value="Femër">Femër</option>
+              </select>
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Gjendja</label>
+              <select
+                className="form-select rounded-3"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="true">Aktiv</option>
+                <option value="false">Jo-Aktiv</option>
+              </select>
+            </div>
+
+            <div className="col-12">
+              <label className="form-label">Numri identifikues</label>
+              <input
+                className="form-control rounded-3"
+                value={emp.ID}
+                readOnly
+              />
+            </div>
+
           </div>
         </div>
+
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 /* =======================================================
@@ -237,7 +278,7 @@ return (
                     className="btn btn-sm btn-primary w-auto px-3"
         onClick={onRegister}
       >
-        + Add Employee
+        + Shto punonjës
       </button>
     </div>
 </div>
@@ -279,7 +320,7 @@ return (
                     emp.is_active ? "bg-success" : "bg-secondary"
                   }`}
                 >
-                  {emp.is_active ? "Active" : "Inactive"}
+                  {emp.is_active ? "Aktiv" : "Jo-Aktiv"}
                 </span>
               </td>
 
