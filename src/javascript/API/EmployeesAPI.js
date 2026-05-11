@@ -23,24 +23,28 @@ export async function fetchEmployees() {
 export async function registerEmployee(employeeData) {
 
   const token = sessionStorage.getItem("accessToken");
-  try{
-       const API = process.env.REACT_APP_EMPLOYEES_REGISTER;
+
+  const API = process.env.REACT_APP_EMPLOYEES_REGISTER;
+
   const res = await fetch(API, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
     body: JSON.stringify(employeeData)
   });
 
-  if (res.status === 401) throw new TokenException();
+  const data = await res.json();
 
-      
-    return (await res.json()).message;
+  if (!res.ok) {
+    throw {
+      status: res.status,
+      message: data.message
+    };
+  }
 
-}
-  catch(err){
- ExceptionHandler.handle(err);
- return [];
-}
+  return data;
 }
 
 export async function updateEmployee(id, employeeData) {
@@ -75,8 +79,6 @@ export async function deleteEmployee(id){
             });
 
              if (res.status === 401) throw new TokenException();
-
-             alert("Employee deleted!");
 }
   catch(err){
  ExceptionHandler.handle(err);

@@ -11,7 +11,7 @@ import "../css/tables.css";
 /* =======================================================
    EMPLOYEE PROFILE
 ======================================================= */
-export function Employees({ emp }) {
+export function Employees({ emp, onDelete }) {
   const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState(emp?.emri || "");
@@ -24,18 +24,18 @@ export function Employees({ emp }) {
   const [status, setStatus] = useState(emp?.is_active ? "true" : "false");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (emp) {
-      setFirstName(emp.emri);
-      setLastName(emp.mbiemri);
-      setUsername(emp.username);
-      setEmail(emp.email);
-      setPhone(emp.numri_telefonit);
-      setGender(emp.gjinia);
-      setStatus(emp.is_active ? "true" : "false");
-      setUserpassword(emp.userpassword);
-    }
-  }, [emp]);
+useEffect(() => {
+  if (emp) {
+    setFirstName(emp.emri || "");
+    setLastName(emp.mbiemri || "");
+    setUsername(emp.username || "");
+    setEmail(emp.email || "");
+    setPhone(emp.numri_telefonit || "");
+    setGender(emp.gjinia || "Mashkull");
+    setStatus(emp.is_active ? "true" : "false");
+    setUserpassword(emp.userpassword || "");
+  }
+}, [emp]);
 
   if (!emp) return <div className="container-xl py-4">No employee selected</div>;
 
@@ -45,7 +45,7 @@ export function Employees({ emp }) {
     try {
       await deleteEmployee(emp.ID);
       alert("Punonjësi u fshi!");
-      navigate("/", { replace: true });
+      onDelete();
     } catch (err) {
       ExceptionHandler.handle(err);
     }
@@ -65,7 +65,7 @@ export function Employees({ emp }) {
       email,
       numri_telefonit: phone,
       gjinia: gender,
-      is_active: status === "true",
+      isActive: status === "true",
     };
 
     try {
@@ -315,13 +315,9 @@ return (
               <td>{emp.numri_telefonit}</td>
 
               <td>
-                <span
-                  className={`badge ${
-                    emp.is_active ? "bg-success" : "bg-secondary"
-                  }`}
-                >
-                  {emp.is_active ? "Aktiv" : "Jo-Aktiv"}
-                </span>
+               <span className={`badge ${emp.is_active ? "bg-success" : "bg-secondary"}`}>
+  {emp.is_active ? "Aktiv" : "Jo-Aktiv"}
+</span>
               </td>
 
             </tr>
@@ -346,10 +342,12 @@ export function RegisterEmployee() {
     e.preventDefault();
     setLoading(true);
 
+        if(!window.confirm("Dëshironi të krijoni këtë punonjës?")) return;
+
     try {
       const formData = new FormData(e.target);
 
-      const data = {
+          const data = {
         emri: formData.get("emri"),
         mbiemri: formData.get("mbiemri"),
         username: formData.get("username"),
@@ -360,11 +358,17 @@ export function RegisterEmployee() {
         pershkrimi: formData.get("pershkrimi"),
       };
 
-      await registerEmployee(data);
-      alert("Employee created!");
-      e.target.reset();
+    const res = await registerEmployee(data);
+ alert("Punonjësi u krijua me sukses!");
+  e.target.reset();
+
+
     } catch (err) {
-      ExceptionHandler.handle(err);
+      if (err.status === 400) {
+    alert("Punonjësi ekziston!");
+  } else {
+    alert(err.message || "Dështim!");
+  }
     } finally {
       setLoading(false);
     }
@@ -382,12 +386,12 @@ export function RegisterEmployee() {
           <form onSubmit={handleSubmit}>
             <div className="row g-3">
               <div className="col-md-6">
-                <label className="form-label">First Name</label>
+                <label className="form-label">Emri</label>
                 <input className="form-control rounded-3" name="emri" required />
               </div>
 
               <div className="col-md-6">
-                <label className="form-label">Last Name</label>
+                <label className="form-label">Mbiemri</label>
                 <input
                   className="form-control rounded-3"
                   name="mbiemri"
@@ -396,7 +400,7 @@ export function RegisterEmployee() {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label">Username</label>
+                <label className="form-label">Emri i përdoruesit</label>
                 <input
                   className="form-control rounded-3"
                   name="username"
@@ -415,7 +419,7 @@ export function RegisterEmployee() {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label">Phone</label>
+                <label className="form-label">Numri i telefonit</label>
                 <input
                   className="form-control rounded-3"
                   name="numri_telefonit"
@@ -426,7 +430,7 @@ export function RegisterEmployee() {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label">Password</label>
+                <label className="form-label">Fjalëkalimi</label>
                 <input
                   className="form-control rounded-3"
                   name="userpassword"
@@ -435,13 +439,13 @@ export function RegisterEmployee() {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label">Gender</label>
+                <label className="form-label">Gjinia</label>
                 <select
                   className="form-select rounded-3"
                   name="gjinia"
                 >
-                  <option value="Mashkull">Male</option>
-                  <option value="Femër">Female</option>
+                  <option value="Mashkull">Mashkull</option>
+                  <option value="Femër">Femër</option>
                 </select>
               </div>
 
@@ -460,7 +464,7 @@ export function RegisterEmployee() {
                   type="submit"
                   disabled={loading}
                 >
-                  {loading ? "Creating..." : "Create Employee"}
+                  {loading ? "Duke regjistruar..." : "Regjistro punonjës"}
                 </button>
               </div>
             </div>

@@ -99,6 +99,9 @@ function Home() {
     setActivePage("employeeProfile");
   };
 
+  const handleDeletedEmployee = () =>{
+setActivePage("employees");
+  }
   const handleSelectedService = (service) => {
     setSelectedService(service);
     setActivePage("service");
@@ -127,7 +130,7 @@ function Home() {
 
       case "employeeProfile":
         return selectedEmployee ? (
-          <Employees emp={selectedEmployee} />
+          <Employees emp={selectedEmployee} onDelete={handleDeletedEmployee} />
         ) : (
           <h2>No employee selected</h2>
         );

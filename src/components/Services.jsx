@@ -233,7 +233,7 @@ const handleSave = async () => {
 
     const payload = {
       ...form,
-      atributet: cleanedAttributes, // ✅ send only clean data
+      atributet: cleanedAttributes, 
     };
 
     const success = await updateService(service.ID, payload);
