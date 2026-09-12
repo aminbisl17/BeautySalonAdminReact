@@ -8,6 +8,7 @@ import {
 } from "../javascript/API/EmployeesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
 import "../css/tables.css";
+
 /* =======================================================
    EMPLOYEE PROFILE
 ======================================================= */
@@ -24,18 +25,18 @@ export function Employees({ emp, onDelete }) {
   const [status, setStatus] = useState(emp?.is_active ? "true" : "false");
   const [loading, setLoading] = useState(false);
 
-useEffect(() => {
-  if (emp) {
-    setFirstName(emp.emri || "");
-    setLastName(emp.mbiemri || "");
-    setUsername(emp.username || "");
-    setEmail(emp.email || "");
-    setPhone(emp.numri_telefonit || "");
-    setGender(emp.gjinia || "Mashkull");
-    setStatus(emp.is_active ? "true" : "false");
-    setUserpassword(emp.userpassword || "");
-  }
-}, [emp]);
+  useEffect(() => {
+    if (emp) {
+      setFirstName(emp.emri || "");
+      setLastName(emp.mbiemri || "");
+      setUsername(emp.username || "");
+      setEmail(emp.email || "");
+      setPhone(emp.numri_telefonit || "");
+      setGender(emp.gjinia || "Mashkull");
+      setStatus(emp.is_active ? "true" : "false");
+      setUserpassword(emp.userpassword || "");
+    }
+  }, [emp]);
 
   if (!emp) return <div className="container-xl py-4">No employee selected</div>;
 
@@ -52,8 +53,7 @@ useEffect(() => {
   };
 
   const save = async () => {
-
-    if (!window.confirm("Përditësoni të dhënat?")) return
+    if (!window.confirm("Përditësoni të dhënat?")) return;
 
     setLoading(true);
 
@@ -78,169 +78,161 @@ useEffect(() => {
     }
   };
 
-return (
-  <div className="w-100">
+  return (
+    <div className="w-100">
+      {/* HEADER */}
+      <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+        <div>
+          <h3 className="fw-bold mb-1">{emp.emri}</h3>
+          <small className="text-muted">Menaxhoni detajet e punonjësve</small>
+        </div>
 
-    {/* HEADER */}
-    <div className="d-flex align-items-center justify-content-between mb-4">
-      <div>
-        <h3 className="fw-bold mb-1">{emp.emri}</h3>
-        <small className="text-muted">Menaxhoni detajet e punonjësve</small>
+        <div className="d-flex flex-wrap gap-2 w-100 w-sm-auto">
+          <button
+            className="btn btn-sm btn-primary flex-grow-1 flex-sm-grow-0 px-3"
+            onClick={save}
+            disabled={loading}
+          >
+            {loading ? "Duke u përditësuar..." : "Ruaj ndryshimet"}
+          </button>
+
+          <button
+            className="btn btn-danger btn-sm flex-grow-1 flex-sm-grow-0 px-3"
+            onClick={deleteEmp}
+          >
+            Fshi punonjësin
+          </button>
+        </div>
       </div>
 
-    <div className="d-flex gap-2">
-     <button
-  className="btn btn-sm btn-primary w-auto px-3"
+      {/* CARD */}
+      <div className="card border-0 shadow-sm rounded-4 p-3 p-md-4">
+        <div className="row g-4">
+          {/* LEFT SIDEBAR (PROFILE SUMMARY) */}
+          <div className="col-12 col-md-4 border-end-md pe-md-4 mb-3 mb-md-0">
+            <div className="text-center">
+              <div
+                className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                style={{ width: 90, height: 90, fontSize: 28, fontWeight: "bold" }}
+              >
+                {emp.emri?.charAt(0)}
+              </div>
 
-  onClick={save}
-  disabled={loading}
->
-  {loading ? "Duke u përditësuar..." : "Ruaj ndryshimet"}
-</button>
+              <h5 className="mb-1">{emp.emri}</h5>
+              <p className="text-muted text-break mb-3">{email}</p>
 
-<button
-   className="btn btn-danger btn-sm w-auto px-3"
-
-  onClick={deleteEmp}
->
-  Fshi punonjësin
-</button>
-      </div>
-    </div>
-
-    {/* CARD */}
-    <div className="card border-0 shadow-sm rounded-4 p-4">
-      <div className="row g-4">
-
-        {/* LEFT SIDEBAR (PROFILE SUMMARY) */}
-        <div className="col-md-4 border-end pe-4">
-
-          <div className="text-center">
-            <div
-              className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
-              style={{ width: 90, height: 90, fontSize: 28, fontWeight: "bold" }}
-            >
-              {emp.emri?.charAt(0)}
+              <span className={`badge ${status === "true" ? "bg-success" : "bg-secondary"}`}>
+                {status === "true" ? "Aktiv" : "Jo-Aktiv"}
+              </span>
             </div>
 
-            <h5 className="mb-1">{emp.emri}</h5>
-            <p className="text-muted mb-3">{email}</p>
+            <hr className="my-4" />
 
-            <span className={`badge ${status === "true" ? "bg-success" : "bg-secondary"}`}>
-              {status === "true" ? "Aktiv" : "Jo-Aktiv"}
-            </span>
+            <div className="small text-muted">
+              <div className="mb-2">
+                <strong>ID:</strong> {emp.ID}
+              </div>
+              <div className="mb-2">
+                <strong>Role:</strong> Employee
+              </div>
+            </div>
           </div>
 
-          <hr className="my-4" />
+          {/* RIGHT SIDE (FORM) */}
+          <div className="col-12 col-md-8">
+            <div className="row g-3">
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Emri</label>
+                <input
+                  className="form-control rounded-3"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
 
-          <div className="small text-muted">
-            <div className="mb-2">
-              <strong>ID:</strong> {emp.ID}
-            </div>
-            <div className="mb-2">
-              <strong>Role:</strong> Employee
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Mbiemri</label>
+                <input
+                  className="form-control rounded-3"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Emri i përdoruesit</label>
+                <input
+                  className="form-control rounded-3"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Email</label>
+                <input
+                  className="form-control rounded-3"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Numri i telefonit</label>
+                <input
+                  className="form-control rounded-3"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Fjalkalimi</label>
+                <input
+                  className="form-control rounded-3"
+                  value={userpassword}
+                  onChange={(e) => setUserpassword(e.target.value)}
+                />
+              </div>
+
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Gjinia</label>
+                <select
+                  className="form-select rounded-3"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <option value="Mashkull">Mashkull</option>
+                  <option value="Femër">Femër</option>
+                </select>
+              </div>
+
+              <div className="col-12 col-sm-6">
+                <label className="form-label">Gjendja</label>
+                <select
+                  className="form-select rounded-3"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="true">Aktiv</option>
+                  <option value="false">Jo-Aktiv</option>
+                </select>
+              </div>
+
+              <div className="col-12">
+                <label className="form-label">Numri identifikues</label>
+                <input
+                  className="form-control rounded-3"
+                  value={emp.ID}
+                  readOnly
+                />
+              </div>
             </div>
           </div>
         </div>
-
-        {/* RIGHT SIDE (FORM) */}
-        <div className="col-md-8">
-          <div className="row g-3">
-
-            <div className="col-md-6">
-              <label className="form-label">Emri</label>
-              <input
-                className="form-control rounded-3"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Mbiemri</label>
-              <input
-                className="form-control rounded-3"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Emri i përdoruesit</label>
-              <input
-                className="form-control rounded-3"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Email</label>
-              <input
-                className="form-control rounded-3"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Numri i telefonit</label>
-              <input
-                className="form-control rounded-3"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Fjalkalimi</label>
-              <input
-                className="form-control rounded-3"
-                value={userpassword}
-                onChange={(e) => setUserpassword(e.target.value)}
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Gjinia</label>
-              <select
-                className="form-select rounded-3"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
-                <option value="Mashkull">Mashkull</option>
-                <option value="Femër">Femër</option>
-              </select>
-            </div>
-
-            <div className="col-md-6">
-              <label className="form-label">Gjendja</label>
-              <select
-                className="form-select rounded-3"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="true">Aktiv</option>
-                <option value="false">Jo-Aktiv</option>
-              </select>
-            </div>
-
-            <div className="col-12">
-              <label className="form-label">Numri identifikues</label>
-              <input
-                className="form-control rounded-3"
-                value={emp.ID}
-                readOnly
-              />
-            </div>
-
-          </div>
-        </div>
-
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 /* =======================================================
@@ -261,75 +253,68 @@ export function EmployeesTable({ onSelect, onRegister }) {
       ExceptionHandler.handle(err);
     }
   }
-return (
-  <div className="page">
 
-    <div className="page-header">
-      <div>
-        <h4 className="mb-0 fw-bold">Stafi</h4>
-        <small className="text-muted">
-         Menaxho llogaritë dhe lejet e stafit
-        </small>
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
+          <h4 className="mb-0 fw-bold">Stafi</h4>
+          <small className="text-muted">
+            Menaxho llogaritë dhe lejet e stafit
+          </small>
+        </div>
+
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-sm btn-primary w-auto px-3"
+            onClick={onRegister}
+          >
+            + Shto punonjës
+          </button>
+        </div>
       </div>
 
-      
-<div className="d-flex gap-2">
-            <button
-                    className="btn btn-sm btn-primary w-auto px-3"
-        onClick={onRegister}
-      >
-        + Shto punonjës
-      </button>
-    </div>
-</div>
-
-    <div className="table-wrapper">
-
-      <table className="custom-table">
-
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Emri & Mbiemri</th>
-            <th>Emri i përdoruesit</th>
-            <th>Email</th>
-            <th>Numri i telefonit</th>
-            <th>Gjendja</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {employees.map((emp) => (
-            <tr key={emp.ID} onClick={() => onSelect(emp)}>
-
-              <td>#{emp.ID}</td>
-
-              <td>
-                <b>{emp.emri} {emp.mbiemri}</b>
-              </td>
-
-              <td className="text-muted">@{emp.username}</td>
-
-              <td>{emp.email}</td>
-
-              <td>{emp.numri_telefonit}</td>
-
-              <td>
-               <span className={`badge ${emp.is_active ? "bg-success" : "bg-secondary"}`}>
-  {emp.is_active ? "Aktiv" : "Jo-Aktiv"}
-</span>
-              </td>
-
+      <div className="table-wrapper">
+        <table className="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Emri & Mbiemri</th>
+              <th>Emri i përdoruesit</th>
+              <th>Email</th>
+              <th>Numri i telefonit</th>
+              <th>Gjendja</th>
             </tr>
-          ))}
-        </tbody>
+          </thead>
 
-      </table>
-
+          <tbody>
+            {employees.map((emp) => (
+              <tr key={emp.ID} onClick={() => onSelect(emp)}>
+                <td>#{emp.ID}</td>
+                <td>
+                  <b>
+                    {emp.emri} {emp.mbiemri}
+                  </b>
+                </td>
+                <td className="text-muted">@{emp.username}</td>
+                <td>{emp.email}</td>
+                <td>{emp.numri_telefonit}</td>
+                <td>
+                  <span
+                    className={`badge ${
+                      emp.is_active ? "bg-success" : "bg-secondary"
+                    }`}
+                  >
+                    {emp.is_active ? "Aktiv" : "Jo-Aktiv"}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-
-  </div>
-);
+  );
 }
 
 /* =======================================================
@@ -342,12 +327,12 @@ export function RegisterEmployee() {
     e.preventDefault();
     setLoading(true);
 
-        if(!window.confirm("Dëshironi të krijoni këtë punonjës?")) return;
+    if (!window.confirm("Dëshironi të krijoni këtë punonjës?")) return;
 
     try {
       const formData = new FormData(e.target);
 
-          const data = {
+      const data = {
         emri: formData.get("emri"),
         mbiemri: formData.get("mbiemri"),
         username: formData.get("username"),
@@ -358,39 +343,37 @@ export function RegisterEmployee() {
         pershkrimi: formData.get("pershkrimi"),
       };
 
-    const res = await registerEmployee(data);
- alert("Punonjësi u krijua me sukses!");
-  e.target.reset();
-
-
+      await registerEmployee(data);
+      alert("Punonjësi u krijua me sukses!");
+      e.target.reset();
     } catch (err) {
       if (err.status === 400) {
-    alert("Punonjësi ekziston!");
-  } else {
-    alert(err.message || "Dështim!");
-  }
+        alert("Punonjësi ekziston!");
+      } else {
+        alert(err.message || "Dështim!");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-     <div className="w-100">
+    <div className="w-100">
       <div className="mb-4">
         <h3 className="fw-bold mb-1">Register Employee</h3>
         <small className="text-muted">Create a new employee account</small>
       </div>
 
       <div className="card border-0 shadow-sm rounded-4">
-        <div className="card-body p-4">
+        <div className="card-body p-3 p-md-4">
           <form onSubmit={handleSubmit}>
             <div className="row g-3">
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Emri</label>
                 <input className="form-control rounded-3" name="emri" required />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Mbiemri</label>
                 <input
                   className="form-control rounded-3"
@@ -399,7 +382,7 @@ export function RegisterEmployee() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Emri i përdoruesit</label>
                 <input
                   className="form-control rounded-3"
@@ -408,7 +391,7 @@ export function RegisterEmployee() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Email</label>
                 <input
                   className="form-control rounded-3"
@@ -418,7 +401,7 @@ export function RegisterEmployee() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Numri i telefonit</label>
                 <input
                   className="form-control rounded-3"
@@ -429,7 +412,7 @@ export function RegisterEmployee() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Fjalëkalimi</label>
                 <input
                   className="form-control rounded-3"
@@ -438,7 +421,7 @@ export function RegisterEmployee() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-12 col-sm-6">
                 <label className="form-label">Gjinia</label>
                 <select
                   className="form-select rounded-3"
@@ -460,7 +443,7 @@ export function RegisterEmployee() {
 
               <div className="col-12 text-end mt-3">
                 <button
-                  className="btn btn-primary rounded-pill px-4"
+                  className="btn btn-primary rounded-pill w-100 w-sm-auto px-4"
                   type="submit"
                   disabled={loading}
                 >

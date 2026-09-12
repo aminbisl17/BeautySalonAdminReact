@@ -111,42 +111,53 @@ export function ViewService({ service, onDelete}) {
   const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
-    if (!service?.ID) return;
+  if (!service?.ID) return;
 
-    async function loadAttributes() {
-      try {
-        const data = await fetchServiceAtributes(service.ID);
-
-      setForm((prev) => {
   const totalMinutes = Number(service?.kohezgjatja || 0);
 
-  return {
-    ...prev,
-    ...data,
-    kohezgjatja: totalMinutes,
+  // 1. Marrja e imazhit fillestar nga service
+  const initialImage = service.imagePath || service.imageURL || null;
+
+  setForm({
+    ...service,
+    imageURL: initialImage,
     hours: Math.floor(totalMinutes / 60),
     minutes: totalMinutes % 60,
-  };
-});
+  });
 
-        setAttributes(
-  (data.atributet || []).map((a) => {
-    const mins = Number(a.kohezgjatja || 0);
+  async function loadAttributes() {
+    try {
+      const data = await fetchServiceAtributes(service.ID);
 
-    return {
-      ...a,
-      hours: Math.floor(mins / 60),
-      minutes: mins % 60,
-    };
-  })
-);
-      } catch (err) {
-        ExceptionHandler.handle(err);
-      }
+      // 2. Lexojmë imagePath nga përgjigja e backend-it
+      const imageUrlFromBackend = data?.imagePath || data?.imageURL || initialImage;
+
+      setForm((prev) => ({
+        ...prev,
+        ...data,
+        imageURL: imageUrlFromBackend, // Ruajmë URL-në nga Azure
+        kohezgjatja: totalMinutes,
+        hours: Math.floor(totalMinutes / 60),
+        minutes: totalMinutes % 60,
+      }));
+
+      setAttributes(
+        (data.atributet || []).map((a) => {
+          const mins = Number(a.kohezgjatja || 0);
+          return {
+            ...a,
+            hours: Math.floor(mins / 60),
+            minutes: mins % 60,
+          };
+        })
+      );
+    } catch (err) {
+      ExceptionHandler.handle(err);
     }
+  }
 
-    loadAttributes();
-  }, [service]);
+  loadAttributes();
+}, [service]);
 
   const handleServiceDuration = (field, value) => {
     setForm((prev) => {
@@ -310,36 +321,38 @@ const handleSave = async () => {
 <div className="col-md-3 text-center">
 
   <label style={{ cursor: "pointer", position: "relative" }}>
-
-    {form.imageURL ? (
-      <img
-        src={form.imageURL}
-        alt="service"
-        style={{
-          width: "140px",
-          height: "140px",
-          objectFit: "cover",
-          borderRadius: "50%",
-          border: "1px solid #ddd",
-        }}
-      />
-    ) : (
-      <div
-        style={{
-          width: "140px",
-          height: "140px",
-          borderRadius: "50%",
-          border: "1px solid #ddd",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "40px",
-          margin: "0 auto",
-        }}
-      >
-        🛠️
-      </div>
-    )}
+{form.imageURL ? (
+  <img
+    src={form.imageURL}
+    alt="service"
+    onError={(e) => {
+      console.error("Dështoi ngarkimi i imazhit nga URL:", form.imageURL);
+    }}
+    style={{
+      width: "140px",
+      height: "140px",
+      objectFit: "cover",
+      borderRadius: "50%",
+      border: "1px solid #ddd",
+    }}
+  />
+) : (
+  <div
+    style={{
+      width: "140px",
+      height: "140px",
+      borderRadius: "50%",
+      border: "1px solid #ddd",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "40px",
+      margin: "0 auto",
+    }}
+  >
+    🛠️
+  </div>
+)}
 
     <input
       type="file"

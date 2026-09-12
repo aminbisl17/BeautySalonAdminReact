@@ -81,7 +81,7 @@ function LoginView() {
             sessionStorage.setItem("accessToken", data.token);
 
             const userRes = await fetch(
-                "http://localhost:8000/api/admin/data",
+                API_DATA,
                 {
                     headers: { Authorization: `Bearer ${data.token}` },
                     credentials: "include",

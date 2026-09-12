@@ -35,20 +35,16 @@ export async function fetchServices() {
   }
 }
 export async function fetchServiceAtributes(ID) {
-
-    const API = process.env.REACT_APP_SERVICES_ATRIBUTES;
+  const API = process.env.REACT_APP_SERVICES_ATRIBUTES;
   const token = sessionStorage.getItem("accessToken");
 
   try {
-    const response = await fetch(
-      `${API + ID}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+    const response = await fetch(`${API}${ID}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    );
+    });
 
     if (response.status === 401) throw new TokenException();
 
@@ -58,23 +54,16 @@ export async function fetchServiceAtributes(ID) {
 
     const data = await response.json();
 
-       if (data.imagePath) {
-    
-      data.imageURL = `data:image/jpeg;base64,${data.imagePath}`;
-    } else {
-      data.imageURL = null; 
-   
-    }
-    
-    return data;
+    // Azure Blob kthen URL të plotë HTTP/HTTPS, prandaj përdoret direkt
+    data.imageURL = data.imagePath ? data.imagePath : null;
 
+    return data;
   } catch (err) {
     ExceptionHandler.handle(err);
-   // return null; 
-   return {
-    atributet: [],
-    imageURL: null
-  };
+    return {
+      atributet: [],
+      imageURL: null
+    };
   }
 }
 

@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    box-sizing: border-box;
 }
 
 /* =========================
@@ -40,7 +41,7 @@
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
 }
 
@@ -77,6 +78,7 @@
     font-weight: 700;
     margin-top: 10px;
     color: #0f172a;
+    word-break: break-word;
 }
 
 /* =========================
@@ -89,7 +91,7 @@
 .dashboard-card.orange { border-left: 5px solid #f59e0b; }
 
 /* =========================
-   CHART SECTION (FIXED + CLEAN)
+   CHART SECTION (RESPONSIVE)
 ========================= */
 
 .dashboard-chart {
@@ -112,6 +114,13 @@
     color: #0f172a;
 }
 
+.chart-scroll-wrapper {
+    flex: 1;
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+}
+
 /* chart container */
 .chart-bars {
     display: flex;
@@ -120,8 +129,10 @@
 
     flex: 1;
     gap: 10px;
+    min-width: 480px; /* ensures bars remain legible on small screens */
 
     padding-top: 20px;
+    padding-bottom: 4px;
 }
 
 /* each column */
@@ -170,4 +181,46 @@
     padding: 40px;
     text-align: center;
     color: #64748b;
+}
+
+/* =========================
+   MOBILE RESPONSIVE STYLES
+========================= */
+
+@media (max-width: 640px) {
+    .dashboard-header {
+        padding: 16px;
+    }
+
+    .dashboard-header h2 {
+        font-size: 18px;
+    }
+
+    .dashboard-header p {
+        font-size: 13px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .dashboard-card {
+        padding: 14px;
+    }
+
+    .card-value {
+        font-size: 22px;
+    }
+
+    .dashboard-chart {
+        padding: 14px;
+        height: 280px;
+    }
+}
+
+@media (max-width: 400px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
 }
