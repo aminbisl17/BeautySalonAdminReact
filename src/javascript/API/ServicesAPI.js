@@ -125,7 +125,7 @@ export async function updateService(id, form) {
     }
 
     const response = await fetch(`${API + id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`
        
