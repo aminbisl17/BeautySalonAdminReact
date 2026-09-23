@@ -262,8 +262,6 @@ export function ServiceTable({ onSelect, onRegister }) {
 ========================================================= */
 
 export function ViewService({ service, onDelete }) {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({ ...service });
   const [attributes, setAttributes] = useState([]);
 
@@ -697,6 +695,29 @@ export function ViewService({ service, onDelete }) {
                 />
 
               </div>
+
+<div className="col-md-6">
+
+  <label className="form-label">
+    Zbritja (%)
+  </label>
+
+  <input
+    className="form-control"
+    type="number"
+    min="0"
+    max="100"
+    step="0.01"
+    value={form.zbritja ?? 0}
+    onChange={(e) =>
+      setForm({
+        ...form,
+        zbritja: e.target.value,
+      })
+    }
+  />
+
+</div>
 
 
               <div className="col-md-6">
