@@ -1,0 +1,955 @@
+/* =========================================================
+   SERVICES — SHARED DESIGN SYSTEM
+========================================================= */
+
+:root {
+  --admin-bg: #f5f7f6;
+  --surface: #ffffff;
+  --surface-soft: #f8faf9;
+
+  --text-main: #18201c;
+  --text-secondary: #69736d;
+  --text-muted: #8a938e;
+
+  --border: #e3e9e5;
+  --border-soft: #edf1ee;
+
+  --accent: #477a61;
+  --accent-dark: #38644e;
+  --accent-soft: #edf5f0;
+
+  --danger: #a65353;
+  --danger-soft: #fbefef;
+
+  --success: #477a61;
+  --success-soft: #edf5f0;
+
+  --shadow-sm: 0 2px 10px rgba(24, 32, 28, 0.04);
+  --shadow-md: 0 8px 25px rgba(24, 32, 28, 0.06);
+
+  --radius: 14px;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+  width: 100%;
+  padding: 4px 0 30px;
+  color: var(--text-main);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.page-header h4 {
+  color: var(--text-main);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.page-header small {
+  color: var(--text-secondary) !important;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.page .btn-primary,
+.service-view .btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  border-radius: 9px;
+  font-weight: 600;
+  box-shadow: none;
+  transition: 0.2s ease;
+}
+
+.page .btn-primary:hover,
+.service-view .btn-primary:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+.page .btn-outline-primary,
+.service-view .btn-outline-primary {
+  color: var(--accent);
+  border-color: #b9cec2;
+  background: white;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+.page .btn-outline-primary:hover,
+.service-view .btn-outline-primary:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+
+
+/* =========================================================
+   SERVICE TABLE
+========================================================= */
+
+.table-wrapper {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  min-width: 950px;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.custom-table thead th {
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.custom-table tbody td {
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.custom-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.custom-table tbody tr {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.custom-table tbody tr:hover {
+  background: #fafcfb;
+}
+
+.custom-table tbody td:first-child {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.custom-table tbody td b {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.custom-table .badge,
+.mobile-service-card .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 9px;
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.custom-table .bg-success,
+.mobile-service-card .bg-success {
+  background: var(--success-soft) !important;
+  color: var(--accent-dark) !important;
+}
+
+.custom-table .bg-secondary,
+.mobile-service-card .bg-secondary {
+  background: #f0f2f1 !important;
+  color: #717a75 !important;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.service-description-cell {
+  max-width: 230px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   MOBILE SERVICE LIST
+========================================================= */
+
+.mobile-service-list {
+  display: none;
+}
+
+.mobile-service-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 17px;
+  margin-bottom: 12px;
+
+  box-shadow: var(--shadow-sm);
+
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.mobile-service-card:active {
+  transform: scale(0.99);
+}
+
+.mobile-service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.mobile-service-title-wrapper {
+  min-width: 0;
+}
+
+.mobile-service-name {
+  margin: 0 0 4px;
+  color: var(--text-main);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.mobile-service-id {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.mobile-service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+
+  padding: 15px 0;
+}
+
+.mobile-service-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-service-label {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mobile-service-value {
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mobile-service-description {
+  padding: 12px;
+
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 9px;
+
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mobile-service-open {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 13px;
+  padding-top: 13px;
+
+  border-top: 1px solid var(--border-soft);
+
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mobile-service-open span {
+  font-size: 20px;
+  line-height: 12px;
+}
+
+
+/* =========================================================
+   SERVICE VIEW
+========================================================= */
+
+.service-view {
+  padding-bottom: 30px;
+}
+
+.service-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.service-view-title h4 {
+  color: var(--text-main);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.service-view-title .small {
+  color: var(--text-secondary) !important;
+  font-size: 12px;
+}
+
+.service-view-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+.service-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 22px;
+}
+
+.service-card .form-label {
+  margin-bottom: 7px;
+
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.service-card .form-control {
+  min-height: 42px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: white;
+  color: var(--text-main);
+
+  font-size: 13px;
+
+  box-shadow: none;
+  transition: 0.2s ease;
+}
+
+.service-card .form-control:focus {
+  border-color: #a9c4b5;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.service-card textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+/* =========================================================
+   SERVICE IMAGE
+========================================================= */
+
+.service-image-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 220px;
+  height: 180px;
+
+  margin: 0 auto;
+
+  background: var(--surface-soft);
+  border: 1px dashed #cbd8d0;
+  border-radius: 13px;
+
+  overflow: hidden;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.service-image-picker:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.service-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: var(--text-muted);
+  font-size: 32px;
+  opacity: 0.6;
+}
+
+.service-image-hint {
+  margin-top: 9px;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.service-card .btn-danger {
+  background: var(--danger-soft);
+  border-color: #edcccc;
+  color: var(--danger);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.service-card .btn-danger:hover {
+  background: #f6dddd;
+  border-color: #dfb5b5;
+  color: #914747;
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.service-card .form-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.service-card .form-check-input {
+  width: 2.3em;
+  height: 1.25em;
+
+  cursor: pointer;
+
+  border-color: #cbd5cf;
+  box-shadow: none;
+}
+
+.service-card .form-check-input:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.service-card .form-check-label {
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ATTRIBUTE SECTION
+========================================================= */
+
+.attribute-section {
+  margin-top: 20px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+
+  padding: 22px;
+}
+
+.attribute-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-bottom: 17px;
+}
+
+.attribute-header h5 {
+  margin: 0;
+
+  color: var(--text-main);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.attribute-section > p {
+  padding: 15px;
+
+  background: var(--surface-soft);
+  border-radius: 9px;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   ATTRIBUTE DESKTOP TABLE
+========================================================= */
+
+.attribute-desktop {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.attribute-table {
+  width: 100%;
+  min-width: 760px;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+
+  font-size: 12px;
+}
+
+.attribute-table th {
+  padding: 12px;
+
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--border);
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.attribute-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: middle;
+}
+
+.attribute-table tr:last-child td {
+  border-bottom: none;
+}
+
+.attribute-table .form-control {
+  min-height: 37px;
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.attribute-table .form-control:focus {
+  border-color: #a9c4b5;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+
+/* =========================================================
+   DURATION INPUTS
+========================================================= */
+
+.duration-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+
+  min-width: 115px;
+}
+
+.duration-inputs .form-control {
+  text-align: center;
+}
+
+
+/* =========================================================
+   ATTRIBUTE DELETE
+========================================================= */
+
+.attribute-table .btn-danger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  background: var(--danger-soft);
+  border: 1px solid #edcccc;
+  color: var(--danger);
+
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.attribute-table .btn-danger:hover {
+  background: #f6dddd;
+}
+
+
+/* =========================================================
+   MOBILE ATTRIBUTES
+========================================================= */
+
+.mobile-attribute-list {
+  display: none;
+}
+
+.mobile-attribute-card {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.mobile-attribute-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 16px;
+}
+
+.mobile-attribute-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+
+  border-radius: 50%;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mobile-attribute-delete {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  background: var(--danger-soft) !important;
+  border-color: #edcccc !important;
+  color: var(--danger) !important;
+
+  border-radius: 7px;
+}
+
+.mobile-field {
+  margin-bottom: 13px;
+}
+
+.mobile-field:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-field-label {
+  display: block;
+  margin-bottom: 6px;
+
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mobile-field .form-control {
+  min-height: 42px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.mobile-field .form-control:focus {
+  border-color: #a9c4b5;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.mobile-duration {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+
+/* =========================================================
+   REGISTER SERVICE
+========================================================= */
+
+.container-fluid.py-3 {
+  padding: 4px 0 30px !important;
+}
+
+.container-fluid.py-3 > h4 {
+  margin-bottom: 20px !important;
+
+  color: var(--text-main);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.container-fluid.py-3 form.service-card {
+  padding: 24px !important;
+}
+
+.container-fluid.py-3 hr {
+  border-color: var(--border);
+  opacity: 1;
+}
+
+.container-fluid.py-3 form > .text-end {
+  margin-top: 5px;
+}
+
+.container-fluid.py-3 form > .text-end .btn {
+  min-width: 170px;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .service-desktop-table {
+    display: none;
+  }
+
+  .mobile-service-list {
+    display: block;
+  }
+
+  .service-card {
+    padding: 19px;
+  }
+
+  .attribute-section {
+    padding: 19px;
+  }
+
+  .attribute-desktop {
+    display: none;
+  }
+
+  .mobile-attribute-list {
+    display: block;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .page {
+    padding-bottom: 20px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+
+    margin-bottom: 17px;
+  }
+
+  .page-header h4 {
+    font-size: 19px;
+  }
+
+  .page-header .btn {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  .service-view-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .service-view-title h4 {
+    font-size: 19px;
+  }
+
+  .service-view-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .service-view-actions .btn {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  .service-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .service-image-picker {
+    max-width: none;
+    height: 200px;
+  }
+
+  .attribute-section {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .attribute-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .attribute-header .btn {
+    width: 100%;
+    min-height: 40px;
+  }
+
+  .container-fluid.py-3 form.service-card {
+    padding: 16px !important;
+  }
+
+  .container-fluid.py-3 form > .text-end {
+    text-align: left !important;
+  }
+
+  .container-fluid.py-3 form > .text-end .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .mobile-service-card {
+    padding: 15px;
+  }
+
+  .mobile-service-grid {
+    gap: 13px 10px;
+  }
+
+  .mobile-service-name {
+    font-size: 14px;
+  }
+
+  .mobile-service-card .badge {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+
+  .service-image-picker {
+    height: 175px;
+  }
+
+  .attribute-section {
+    padding: 14px;
+  }
+
+  .mobile-attribute-card {
+    padding: 14px;
+  }
+
+  .service-card .form-control,
+  .mobile-field .form-control {
+    font-size: 13px;
+  }
+
+}

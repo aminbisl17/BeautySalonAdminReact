@@ -8,7 +8,7 @@ import {
   registerServices
 } from "../javascript/API/ServicesAPI";
 import { ExceptionHandler } from "../javascript/Exceptions/ExceptionHandler";
-import "../css/tables.css";
+import "../css/services.css";
 import { useNavigate } from "react-router-dom";
 
 

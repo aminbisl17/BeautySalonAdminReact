@@ -1,88 +1,274 @@
-/* =========================
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+:root {
+    --admin-bg: #f5f7f6;
+    --surface: #ffffff;
+    --surface-soft: #f8faf9;
+
+    --text-main: #18201c;
+    --text-secondary: #69736d;
+    --text-muted: #9aa39d;
+
+    --border: #e7ebe8;
+
+    --accent: #477a61;
+    --accent-dark: #38644e;
+    --accent-soft: #edf5f0;
+
+    --sidebar-width: 245px;
+    --topbar-height: 70px;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    --shadow-sm:
+        0 2px 10px rgba(23, 35, 28, 0.04);
+
+    --shadow-md:
+        0 8px 30px rgba(23, 35, 28, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    background: var(--admin-bg);
+    color: var(--text-main);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font-family: inherit;
+}
+
+.admin-app {
+    min-height: 100vh;
+    background: var(--admin-bg);
+}
+
+
+/* =========================================================
    TOP BAR
-========================= */
+========================================================= */
 
 .topbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 64px;
 
-    background: rgb(32, 33, 36); /* darker than sidebar */
-    color: white;
+    height: var(--topbar-height);
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border-bottom: 1px solid var(--border);
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
-    padding: 0 24px;
+    padding: 0 28px;
+
     z-index: 1100;
 
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
 .topbar-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
 }
 
-/* Title */
+.topbar-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.topbar-eyebrow {
+    color: var(--text-muted);
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
 .topbar-title {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    color: var(--text-main);
+
+    font-size: 15px;
+    font-weight: 650;
+
+    letter-spacing: -0.1px;
 }
 
-/* Menu Toggle Button (Mobile Only) */
-.menu-toggle-btn {
-    display: none;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-/* Logout button */
+
+/* =========================================================
+   ADMIN STATUS
+========================================================= */
+
+.admin-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.admin-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #63a47f;
+
+    box-shadow:
+        0 0 0 3px rgba(99, 164, 127, 0.12);
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
 .logout-btn {
-    background: #ef4444;
-    border: none;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
 
-    padding: 8px 12px;   /* less horizontal space */
-    font-size: 14px;
+    height: 36px;
 
-    border-radius: 5px;
+    padding: 0 13px;
+
+    background: #fff;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    color: #68716c;
+
+    font-size: 12px;
+    font-weight: 600;
+
     cursor: pointer;
 
-    width: auto;         /* ensures it only fits content */
-    white-space: nowrap; /* prevents stretching */
-    line-height: 1;
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
 }
 
 .logout-btn:hover {
-    background: #dc2626;
-    color: white;
+    background: #fafafa;
+    border-color: #dce2de;
+    color: #303833;
 }
 
 .logout-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
-/* =========================
-   GLOBAL LAYOUT
-========================= */
+.logout-icon {
+    width: 15px;
+    height: 15px;
+
+    display: flex;
+}
+
+.logout-icon svg {
+    width: 100%;
+    height: 100%;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+========================================================= */
+
+.menu-toggle-btn {
+    display: none;
+
+    width: 38px;
+    height: 38px;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    background: transparent;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    color: var(--text-main);
+
+    cursor: pointer;
+}
+
+.menu-toggle-btn svg {
+    width: 19px;
+    height: 19px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
 
 .layout {
     display: flex;
 
     position: fixed;
-    top: 64px;
+
+    top: var(--topbar-height);
     left: 0;
     right: 0;
     bottom: 0;
@@ -90,88 +276,314 @@
     overflow: hidden;
 }
 
-/* =========================
+
+/* =========================================================
    SIDEBAR
-========================= */
+========================================================= */
 
 .sidebar {
-    width: 240px;
+    width: var(--sidebar-width);
+
     flex-shrink: 0;
 
     height: 100%;
-    padding: 16px 10px;
 
-    background: rgb(44, 46, 50); /* lighter than topbar */
-    color: white;
+    display: flex;
+    flex-direction: column;
 
-    border-right: 1px solid rgba(255,255,255,0.06);
-    box-shadow: inset -1px 0 0 rgba(255,255,255,0.03);
-    transition: transform 0.3s ease-in-out;
+    padding: 22px 14px 16px;
+
+    background: var(--surface);
+
+    border-right: 1px solid var(--border);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    z-index: 1000;
 }
 
-/* =========================
-   BUTTONS
-========================= */
 
-.sidebar button {
+/* =========================================================
+   BRAND
+========================================================= */
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 0 9px 25px;
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--accent);
+
+    color: white;
+
+    font-family: Georgia, serif;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    box-shadow:
+        0 5px 15px rgba(71, 122, 97, 0.18);
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1.15;
+}
+
+.brand-text strong {
+    font-size: 13px;
+    font-weight: 700;
+
+    color: var(--text-main);
+}
+
+.brand-text span {
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color: var(--text-muted);
+
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================================================
+   SIDEBAR SECTION
+========================================================= */
+
+.sidebar-section-title {
+    padding: 0 11px 9px;
+
+    color: #a0a8a3;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+}
+
+
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
+
+.sidebar-navigation {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.sidebar-link {
+    position: relative;
+
     width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 4px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 44px;
+
+    padding: 0 11px;
 
     border: none;
     border-radius: 10px;
 
     background: transparent;
-    color: #cbd5e1;
 
-    font-size: 14px;
-    font-weight: 500;
+    color: #66716b;
+
+    font-size: 13px;
+    font-weight: 550;
+
     text-align: left;
 
     cursor: pointer;
 
-    transition: all 0.2s ease;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
 }
 
-/* hover */
-.sidebar button:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: white;
-    transform: translateX(2px);
+.sidebar-link:hover {
+    background: #f6f8f7;
+    color: var(--text-main);
 }
 
-/* active state */
-.sidebar button.active {
-    background: #2563eb;
-    color: white;
-    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
+.sidebar-link.active {
+    background: var(--accent-soft);
+    color: var(--accent-dark);
 }
 
-/* remove old icon spacing */
-.sidebar .icon {
-    display: none;
+.sidebar-link.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: -14px;
+
+    width: 3px;
+    height: 24px;
+
+    background: var(--accent);
+
+    border-radius: 0 3px 3px 0;
 }
 
-/* =========================
-   CENTER CONTENT
-========================= */
+.sidebar-icon {
+    width: 19px;
+    height: 19px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.sidebar-icon svg {
+    width: 18px;
+    height: 18px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sidebar-label {
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM
+========================================================= */
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    padding: 12px 4px 0;
+}
+
+.sidebar-status {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px;
+
+    background: #fafcfb;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #63a47f;
+}
+
+.sidebar-status div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+
+    min-width: 0;
+}
+
+.sidebar-status strong {
+    color: #56615a;
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.sidebar-status span {
+    color: #a0a8a3;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
 
 .center-content {
     flex: 1;
+
+    min-width: 0;
     height: 100%;
+
     overflow-y: auto;
-    padding: 24px;
-    box-sizing: border-box;
+
+    padding: 30px;
+
+    background: var(--admin-bg);
+
+    scrollbar-width: thin;
+    scrollbar-color: #d7ddd9 transparent;
 }
 
-/* Ensure pages fill width only (NO flex forcing) */
+.center-content::-webkit-scrollbar {
+    width: 7px;
+}
+
+.center-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.center-content::-webkit-scrollbar-thumb {
+    background: #d7ddd9;
+    border-radius: 10px;
+}
+
 .center-content > * {
     width: 100%;
+    max-width: 1500px;
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* =========================
-   BOOTSTRAP FIX SAFETY
-========================= */
+
+/* =========================================================
+   BOOTSTRAP COMPATIBILITY
+========================================================= */
 
 .card {
     width: 100%;
@@ -182,47 +594,205 @@
     width: 100%;
 }
 
-/* =========================
-   MOBILE RESPONSIVE STYLES
-========================= */
 
-@media (max-width: 768px) {
-    .menu-toggle-btn {
-        display: block;
+/* =========================================================
+   MOBILE OVERLAY
+========================================================= */
+
+.sidebar-overlay {
+    position: fixed;
+
+    top: var(--topbar-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(20, 28, 23, 0.35);
+
+    backdrop-filter: blur(2px);
+
+    z-index: 999;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .center-content {
+        padding: 24px;
     }
 
     .topbar {
-        padding: 0 16px;
+        padding: 0 20px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    :root {
+        --topbar-height: 62px;
+    }
+
+    .topbar {
+        height: var(--topbar-height);
+
+        padding: 0 14px;
+    }
+
+    .menu-toggle-btn {
+        display: flex;
+    }
+
+    .topbar-left {
+        gap: 10px;
+    }
+
+    .topbar-eyebrow {
+        display: none;
     }
 
     .topbar-title {
         font-size: 14px;
     }
 
+    .topbar-right {
+        gap: 8px;
+    }
+
+    .admin-status {
+        display: none;
+    }
+
+    .logout-btn {
+        height: 34px;
+
+        padding: 0 10px;
+    }
+
+    .logout-btn span:last-child {
+        display: none;
+    }
+
+    .logout-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .layout {
+        top: var(--topbar-height);
+    }
+
     .sidebar {
         position: fixed;
-        top: 64px;
+
+        top: var(--topbar-height);
         left: 0;
         bottom: 0;
-        z-index: 1000;
-        transform: translateX(-100%);
+
+        width: min(280px, 84vw);
+
+        transform: translateX(-105%);
+
+        box-shadow: none;
     }
 
     .sidebar.open {
         transform: translateX(0);
-    }
 
-    .sidebar-overlay {
-        position: fixed;
-        top: 64px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
+        box-shadow:
+            10px 0 35px rgba(20, 28, 23, 0.12);
     }
 
     .center-content {
-        padding: 16px;
+        width: 100%;
+
+        padding: 18px 14px 30px;
+    }
+
+    .sidebar-link {
+        min-height: 48px;
+    }
+
+    .sidebar-link.active::before {
+        left: -14px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .topbar {
+        padding: 0 11px;
+    }
+
+    .topbar-title {
+        font-size: 13px;
+    }
+
+    .menu-toggle-btn {
+        width: 35px;
+        height: 35px;
+    }
+
+    .center-content {
+        padding: 14px 10px 25px;
+    }
+
+    .sidebar {
+        width: 86vw;
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+    .sidebar-link:hover {
+        background: transparent;
+        color: #66716b;
+    }
+
+    .sidebar-link.active:hover {
+        background: var(--accent-soft);
+        color: var(--accent-dark);
+    }
+
+    .logout-btn:hover {
+        background: #fff;
+        border-color: var(--border);
+        color: #68716c;
+    }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
     }
 }

@@ -38,7 +38,13 @@ export function Employees({ emp, onDelete }) {
     }
   }, [emp]);
 
-  if (!emp) return <div className="container-xl py-4">No employee selected</div>;
+  if (!emp) {
+    return (
+      <div className="employee-empty">
+        No employee selected
+      </div>
+    );
+  }
 
   const deleteEmp = async () => {
     if (!window.confirm("Fshi këtë punonjës?")) return;
@@ -79,161 +85,249 @@ export function Employees({ emp, onDelete }) {
   };
 
   return (
-    <div className="w-100">
+    <div className="employee-profile">
+
       {/* HEADER */}
-      <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
-        <div>
-          <h3 className="fw-bold mb-1">{emp.emri}</h3>
-          <small className="text-muted">Menaxhoni detajet e punonjësve</small>
+      <div className="employee-profile-header">
+
+        <div className="employee-profile-title">
+          <h3>{emp.emri}</h3>
+          <small>Menaxhoni detajet e punonjësve</small>
         </div>
 
-        <div className="d-flex flex-wrap gap-2 w-100 w-sm-auto">
+        <div className="employee-profile-actions">
+
           <button
-            className="btn btn-sm btn-primary flex-grow-1 flex-sm-grow-0 px-3"
+            className="employee-btn employee-btn-primary"
             onClick={save}
             disabled={loading}
           >
-            {loading ? "Duke u përditësuar..." : "Ruaj ndryshimet"}
+            {loading
+              ? "Duke u përditësuar..."
+              : "Ruaj ndryshimet"}
           </button>
 
           <button
-            className="btn btn-danger btn-sm flex-grow-1 flex-sm-grow-0 px-3"
+            className="employee-btn employee-btn-danger"
             onClick={deleteEmp}
           >
             Fshi punonjësin
           </button>
+
         </div>
+
       </div>
 
-      {/* CARD */}
-      <div className="card border-0 shadow-sm rounded-4 p-3 p-md-4">
-        <div className="row g-4">
-          {/* LEFT SIDEBAR (PROFILE SUMMARY) */}
-          <div className="col-12 col-md-4 border-end-md pe-md-4 mb-3 mb-md-0">
-            <div className="text-center">
-              <div
-                className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
-                style={{ width: 90, height: 90, fontSize: 28, fontWeight: "bold" }}
-              >
+
+      {/* PROFILE CARD */}
+      <div className="employee-profile-card">
+
+        <div className="employee-profile-layout">
+
+          {/* LEFT PROFILE SUMMARY */}
+          <div className="employee-summary">
+
+            <div className="employee-summary-content">
+
+              <div className="employee-avatar">
                 {emp.emri?.charAt(0)}
               </div>
 
-              <h5 className="mb-1">{emp.emri}</h5>
-              <p className="text-muted text-break mb-3">{email}</p>
+              <h5 className="employee-summary-name">
+                {emp.emri}
+              </h5>
 
-              <span className={`badge ${status === "true" ? "bg-success" : "bg-secondary"}`}>
-                {status === "true" ? "Aktiv" : "Jo-Aktiv"}
+              <p className="employee-summary-email">
+                {email}
+              </p>
+
+              <span
+                className={`employee-status ${
+                  status === "true"
+                    ? "employee-status-active"
+                    : "employee-status-inactive"
+                }`}
+              >
+                {status === "true"
+                  ? "Aktiv"
+                  : "Jo-Aktiv"}
               </span>
+
             </div>
 
-            <hr className="my-4" />
+            <div className="employee-summary-divider" />
 
-            <div className="small text-muted">
-              <div className="mb-2">
-                <strong>ID:</strong> {emp.ID}
+            <div className="employee-meta">
+
+              <div className="employee-meta-row">
+                <span>ID</span>
+                <strong>{emp.ID}</strong>
               </div>
-              <div className="mb-2">
-                <strong>Role:</strong> Employee
+
+              <div className="employee-meta-row">
+                <span>Role</span>
+                <strong>Employee</strong>
               </div>
+
             </div>
+
           </div>
 
-          {/* RIGHT SIDE (FORM) */}
-          <div className="col-12 col-md-8">
-            <div className="row g-3">
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Emri</label>
+
+          {/* RIGHT FORM */}
+          <div className="employee-form">
+
+            <div className="employee-form-header">
+              <h4>Të dhënat e punonjësit</h4>
+              <p>Përditësoni informacionin e llogarisë</p>
+            </div>
+
+            <div className="employee-form-grid">
+
+              <div className="employee-field">
+                <label>Emri</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={(e) =>
+                    setFirstName(e.target.value)
+                  }
                 />
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Mbiemri</label>
+
+              <div className="employee-field">
+                <label>Mbiemri</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input"
                   value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) =>
+                    setLastName(e.target.value)
+                  }
                 />
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Emri i përdoruesit</label>
+
+              <div className="employee-field">
+                <label>Emri i përdoruesit</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) =>
+                    setUsername(e.target.value)
+                  }
                 />
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Email</label>
+
+              <div className="employee-field">
+                <label>Email</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
                 />
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Numri i telefonit</label>
+
+              <div className="employee-field">
+                <label>Numri i telefonit</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) =>
+                    setPhone(e.target.value)
+                  }
                 />
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Fjalkalimi</label>
+
+              <div className="employee-field">
+                <label>Fjalëkalimi</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input"
                   value={userpassword}
-                  onChange={(e) => setUserpassword(e.target.value)}
+                  onChange={(e) =>
+                    setUserpassword(e.target.value)
+                  }
                 />
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Gjinia</label>
+
+              <div className="employee-field">
+                <label>Gjinia</label>
+
                 <select
-                  className="form-select rounded-3"
+                  className="employee-input employee-select"
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={(e) =>
+                    setGender(e.target.value)
+                  }
                 >
-                  <option value="Mashkull">Mashkull</option>
-                  <option value="Femër">Femër</option>
+                  <option value="Mashkull">
+                    Mashkull
+                  </option>
+
+                  <option value="Femër">
+                    Femër
+                  </option>
                 </select>
+
               </div>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Gjendja</label>
+
+              <div className="employee-field">
+                <label>Gjendja</label>
+
                 <select
-                  className="form-select rounded-3"
+                  className="employee-input employee-select"
                   value={status}
-                  onChange={(e) => setStatus(e.target.value)}
+                  onChange={(e) =>
+                    setStatus(e.target.value)
+                  }
                 >
-                  <option value="true">Aktiv</option>
-                  <option value="false">Jo-Aktiv</option>
+                  <option value="true">
+                    Aktiv
+                  </option>
+
+                  <option value="false">
+                    Jo-Aktiv
+                  </option>
                 </select>
+
               </div>
 
-              <div className="col-12">
-                <label className="form-label">Numri identifikues</label>
+
+              <div className="employee-field employee-field-full">
+                <label>Numri identifikues</label>
+
                 <input
-                  className="form-control rounded-3"
+                  className="employee-input employee-input-readonly"
                   value={emp.ID}
                   readOnly
                 />
               </div>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }
+
 
 /* =======================================================
    EMPLOYEES TABLE
@@ -255,27 +349,34 @@ export function EmployeesTable({ onSelect, onRegister }) {
   }
 
   return (
-    <div className="page">
-      <div className="page-header">
+    <div className="employees-page">
+
+      {/* HEADER */}
+      <div className="employee-page-header">
+
         <div>
-          <h4 className="mb-0 fw-bold">Stafi</h4>
-          <small className="text-muted">
+          <h4>Stafi</h4>
+
+          <small>
             Menaxho llogaritë dhe lejet e stafit
           </small>
         </div>
 
-        <div className="d-flex gap-2">
-          <button
-            className="btn btn-sm btn-primary w-auto px-3"
-            onClick={onRegister}
-          >
-            + Shto punonjës
-          </button>
-        </div>
+        <button
+          className="employee-btn employee-btn-primary"
+          onClick={onRegister}
+        >
+          + Shto punonjës
+        </button>
+
       </div>
 
-      <div className="table-wrapper">
-        <table className="custom-table">
+
+      {/* DESKTOP TABLE */}
+      <div className="employee-table-wrapper">
+
+        <table className="employee-table">
+
           <thead>
             <tr>
               <th>ID</th>
@@ -288,34 +389,182 @@ export function EmployeesTable({ onSelect, onRegister }) {
           </thead>
 
           <tbody>
+
             {employees.map((emp) => (
-              <tr key={emp.ID} onClick={() => onSelect(emp)}>
-                <td>#{emp.ID}</td>
-                <td>
-                  <b>
-                    {emp.emri} {emp.mbiemri}
-                  </b>
+
+              <tr
+                key={emp.ID}
+                onClick={() => onSelect(emp)}
+              >
+
+                <td className="employee-table-id">
+                  #{emp.ID}
                 </td>
-                <td className="text-muted">@{emp.username}</td>
-                <td>{emp.email}</td>
-                <td>{emp.numri_telefonit}</td>
+
+                <td className="employee-table-name">
+                  {emp.emri} {emp.mbiemri}
+                </td>
+
+                <td className="employee-table-username">
+                  @{emp.username}
+                </td>
+
+                <td className="employee-table-email">
+                  {emp.email}
+                </td>
+
                 <td>
+                  {emp.numri_telefonit}
+                </td>
+
+                <td>
+
                   <span
-                    className={`badge ${
-                      emp.is_active ? "bg-success" : "bg-secondary"
+                    className={`employee-status ${
+                      emp.is_active
+                        ? "employee-status-active"
+                        : "employee-status-inactive"
                     }`}
                   >
-                    {emp.is_active ? "Aktiv" : "Jo-Aktiv"}
+                    {emp.is_active
+                      ? "Aktiv"
+                      : "Jo-Aktiv"}
                   </span>
+
                 </td>
+
               </tr>
+
             ))}
+
           </tbody>
+
         </table>
+
       </div>
+
+
+      {/* MOBILE */}
+      <div className="employee-mobile-list">
+
+        {employees.map((emp) => (
+
+          <div
+            className="employee-mobile-card"
+            key={emp.ID}
+            onClick={() => onSelect(emp)}
+          >
+
+            <div className="employee-mobile-header">
+
+              <div className="employee-mobile-identity">
+
+                <div className="employee-mobile-avatar">
+                  {emp.emri?.charAt(0)}
+                </div>
+
+                <div className="employee-mobile-name">
+
+                  <strong>
+                    {emp.emri} {emp.mbiemri}
+                  </strong>
+
+                  <span>
+                    @{emp.username}
+                  </span>
+
+                </div>
+
+              </div>
+
+              <span
+                className={`employee-status ${
+                  emp.is_active
+                    ? "employee-status-active"
+                    : "employee-status-inactive"
+                }`}
+              >
+                {emp.is_active
+                  ? "Aktiv"
+                  : "Jo-Aktiv"}
+              </span>
+
+            </div>
+
+
+            <div className="employee-mobile-details">
+
+              <div className="employee-mobile-detail">
+
+                <span className="employee-mobile-label">
+                  Email
+                </span>
+
+                <span className="employee-mobile-value">
+                  {emp.email}
+                </span>
+
+              </div>
+
+
+              <div className="employee-mobile-detail">
+
+                <span className="employee-mobile-label">
+                  Telefon
+                </span>
+
+                <span className="employee-mobile-value">
+                  {emp.numri_telefonit}
+                </span>
+
+              </div>
+
+
+              <div className="employee-mobile-detail">
+
+                <span className="employee-mobile-label">
+                  ID
+                </span>
+
+                <span className="employee-mobile-value">
+                  #{emp.ID}
+                </span>
+
+              </div>
+
+
+              <div className="employee-mobile-detail">
+
+                <span className="employee-mobile-label">
+                  Roli
+                </span>
+
+                <span className="employee-mobile-value">
+                  Employee
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div className="employee-mobile-open">
+              <span>Shiko dhe ndrysho</span>
+              <span className="employee-mobile-arrow">
+                ›
+              </span>
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
+
     </div>
   );
 }
+
 
 /* =======================================================
    REGISTER EMPLOYEE
@@ -358,102 +607,150 @@ export function RegisterEmployee() {
   };
 
   return (
-    <div className="w-100">
-      <div className="mb-4">
-        <h3 className="fw-bold mb-1">Register Employee</h3>
-        <small className="text-muted">Create a new employee account</small>
-      </div>
+    <div className="employee-register">
 
-      <div className="card border-0 shadow-sm rounded-4">
-        <div className="card-body p-3 p-md-4">
-          <form onSubmit={handleSubmit}>
-            <div className="row g-3">
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Emri</label>
-                <input className="form-control rounded-3" name="emri" required />
-              </div>
+      {/* HEADER */}
+      <div className="employee-register-header">
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Mbiemri</label>
-                <input
-                  className="form-control rounded-3"
-                  name="mbiemri"
-                  required
-                />
-              </div>
+        <div>
+          <h3>Regjistro punonjës</h3>
 
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Emri i përdoruesit</label>
-                <input
-                  className="form-control rounded-3"
-                  name="username"
-                  required
-                />
-              </div>
-
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Email</label>
-                <input
-                  className="form-control rounded-3"
-                  type="email"
-                  name="email"
-                  required
-                />
-              </div>
-
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Numri i telefonit</label>
-                <input
-                  className="form-control rounded-3"
-                  name="numri_telefonit"
-                  type="tel"
-                  pattern="^\+?[0-9]{8,15}$"
-                  required
-                />
-              </div>
-
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Fjalëkalimi</label>
-                <input
-                  className="form-control rounded-3"
-                  name="userpassword"
-                  required
-                />
-              </div>
-
-              <div className="col-12 col-sm-6">
-                <label className="form-label">Gjinia</label>
-                <select
-                  className="form-select rounded-3"
-                  name="gjinia"
-                >
-                  <option value="Mashkull">Mashkull</option>
-                  <option value="Femër">Femër</option>
-                </select>
-              </div>
-
-              <div className="col-12">
-                <label className="form-label">Description</label>
-                <textarea
-                  className="form-control rounded-3"
-                  rows="3"
-                  name="pershkrimi"
-                ></textarea>
-              </div>
-
-              <div className="col-12 text-end mt-3">
-                <button
-                  className="btn btn-primary rounded-pill w-100 w-sm-auto px-4"
-                  type="submit"
-                  disabled={loading}
-                >
-                  {loading ? "Duke regjistruar..." : "Regjistro punonjës"}
-                </button>
-              </div>
-            </div>
-          </form>
+          <small>
+            Krijoni një llogari të re për punonjësin
+          </small>
         </div>
+
       </div>
+
+
+      {/* CARD */}
+      <div className="employee-register-card">
+
+        <form
+          onSubmit={handleSubmit}
+          className="employee-register-form"
+        >
+
+          <div className="employee-register-grid">
+
+            <div className="employee-field">
+              <label>Emri</label>
+
+              <input
+                className="employee-input"
+                name="emri"
+                required
+              />
+            </div>
+
+
+            <div className="employee-field">
+              <label>Mbiemri</label>
+
+              <input
+                className="employee-input"
+                name="mbiemri"
+                required
+              />
+            </div>
+
+
+            <div className="employee-field">
+              <label>Emri i përdoruesit</label>
+
+              <input
+                className="employee-input"
+                name="username"
+                required
+              />
+            </div>
+
+
+            <div className="employee-field">
+              <label>Email</label>
+
+              <input
+                className="employee-input"
+                type="email"
+                name="email"
+                required
+              />
+            </div>
+
+
+            <div className="employee-field">
+              <label>Numri i telefonit</label>
+
+              <input
+                className="employee-input"
+                name="numri_telefonit"
+                type="tel"
+                pattern="^\+?[0-9]{8,15}$"
+                required
+              />
+            </div>
+
+
+            <div className="employee-field">
+              <label>Fjalëkalimi</label>
+
+              <input
+                className="employee-input"
+                name="userpassword"
+                required
+              />
+            </div>
+
+
+            <div className="employee-field">
+              <label>Gjinia</label>
+
+              <select
+                className="employee-input employee-select"
+                name="gjinia"
+              >
+                <option value="Mashkull">
+                  Mashkull
+                </option>
+
+                <option value="Femër">
+                  Femër
+                </option>
+              </select>
+            </div>
+
+
+            <div className="employee-field employee-field-full">
+              <label>Përshkrimi</label>
+
+              <textarea
+                className="employee-input employee-textarea"
+                rows="3"
+                name="pershkrimi"
+              ></textarea>
+            </div>
+
+          </div>
+
+
+          <div className="employee-register-footer">
+
+            <button
+              className="employee-btn employee-btn-primary employee-register-button"
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Duke regjistruar..."
+                : "Regjistro punonjës"}
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
     </div>
   );
 }
